@@ -16,7 +16,7 @@ The best fit to the data is Fk = Yk*pinv(Xk).
 
 An exponential weighting factor rho=sigma^2 (0<rho<=1) that places more 
 weight on recent data can be incorporated into the definition of X(k) and
-Y(k) such that X(k) = [sigma^(k-1)*x(1),sigma^(k-2)*x(2),…,
+Y(k) such that X(k) = [sigma^(k-1)*x(1),sigma^(k-2)*x(2),...,
 sigma^(1)*x(k-1),x(k)], Y(k) = [sigma^(k-1)*y(1),sigma^(k-2)*y(2),...,
 sigma^(1)*y(k-1),y(k)].
 
