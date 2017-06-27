@@ -32,7 +32,7 @@ class OnlineSysId:
     We would like to update the general DMD matrix Ak = Yk*pinv(Xk) recursively 
     by efficient rank-1 updating online DMD algorithm.
     Therefore, A(k) explains the most recent data and is considered to be 
-    the local linear model for the original nonlinar and/or time-varying 
+    the local linear model for the original nonlinear and/or time-varying 
     system. This local linear model can be used for short-horizon prediction 
     and real-time control.
     

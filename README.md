@@ -13,19 +13,19 @@ of state z(k-1) and control u(k-1). For example, for a nonlinear system
 z(k)=z(k-1)^2+u(k-1)^2, we can define x(k) = [z(k-1)^2;u(k-1)^2], y(k) =
 z(k), then it can be written in linear form y(k) = A*x(k), where A=[1,1].
 At time step k, we assume that we have access to z(j),u(j),j=0,1,2,...k.
-Then we have access to x(j), y(j), j=1,1,2,…,k. We define two matrices
-X(k) = [x(1),x(2),…,x(k)], Y(k) = [y(1),y(2),…,y(k)], that contain 
+Then we have access to x(j), y(j), j=1,1,2,...k. We define two matrices
+X(k) = [x(1),x(2),...,x(k)], Y(k) = [y(1),y(2),...,y(k)], that contain 
 all the past snapshot. The best fit to the data is Ak = Yk*pinv(Xk).  
 An exponential weighting factor rho=sigma^2 (0<rho<=1) that places more 
 weight on recent data can be incorporated into the definition of X(k) and
-Y(k) such that X(k) = [sigma^(k-1)*x(1),sigma^(k-2)*x(2),…,
-sigma^(1)*x(k-1),x(k)], Y(k) = [sigma^(k-1)*y(1),sigma^(k-2)*y(2),…,
+Y(k) such that X(k) = [sigma^(k-1)*x(1),sigma^(k-2)*x(2),...,
+sigma^(1)*x(k-1),x(k)], Y(k) = [sigma^(k-1)*y(1),sigma^(k-2)*y(2),...,
 sigma^(1)*y(k-1),y(k)].  
 At time step k+1, we need to include new snapshot pair x(k+1), y(k+1).
 We would like to update the general DMD matrix Ak = Yk*pinv(Xk) recursively 
 by efficient rank-1 updating online DMD algorithm.  
 Therefore, A(k) explains the most recent data and is considered to be 
-the local linear model for the original nonlinar and/or time-varying 
+the local linear model for the original nonlinear and/or time-varying 
 system. This local linear model can be used for short-horizon prediction 
 and real-time control.  
 The time complexity (multiply–add operation for one iteration) is O(n^2), and space complexity is O(n^2), where n is the problem dimension.  
