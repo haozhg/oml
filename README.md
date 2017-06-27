@@ -11,7 +11,7 @@ model can be written as y(k) = A(k) x(k).
 We can also build nonlinear model by defining nonlinear observable x(k)
 of state z(k-1) and control u(k-1). For example, for a nonlinear system 
 z(k)=z(k-1)^2+u(k-1)^2, we can define x(k) = [z(k-1)^2;u(k-1)^2], y(k) =
-z(k), then it can be written in linear form y(k) = A*x(k), where A=[1,1].
+z(k), then it can be written in linear form y(k) = A*x(k), where A=[1,1].  
 At time step k, we assume that we have access to z(j),u(j),j=0,1,2,...k.
 Then we have access to x(j), y(j), j=1,1,2,...k. We define two matrices
 X(k) = [x(1),x(2),...,x(k)], Y(k) = [y(1),y(2),...,y(k)], that contain 
