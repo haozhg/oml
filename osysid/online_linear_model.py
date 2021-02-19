@@ -32,6 +32,10 @@ class OnlineLinearModel:
 
         # additional parameters
         self._T = 0
+        self._max = max(self._n, self._n + self._k)
+        if self._m:
+            self._max = max(self._max, self._m)
+        self._max = 2 * self._max
         self._ready = False
 
         # initialize model
@@ -64,7 +68,7 @@ class OnlineLinearModel:
         self._T += 1
 
         # mark model as ready
-        if self._T >= 2 * max(self._n, self._n + self._k, self._m):
+        if self._T >= self._max:
             self._ready = True
 
     # no setter
