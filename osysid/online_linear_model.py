@@ -93,6 +93,10 @@ class OnlineLinearModel:
         return self._T
 
     @property
+    def ready(self):
+        return self._ready
+
+    @property
     def A(self):
         if not self._ready:
             logger.warning(f"Model not ready (have not seen enough data)!")

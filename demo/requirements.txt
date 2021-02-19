@@ -3,3 +3,4 @@ numpy
 scipy
 matplotlib
 control
+slycot

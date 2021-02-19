@@ -27,7 +27,7 @@ def test_online_linear_model():
 
         # online linear model learning
         # no need to initialize
-        online_linear_model = OnlineLinearModel(n, k, m, alpha=0.5)
+        olm = OnlineLinearModel(n, k, m, alpha=0.5)
         for i in range(T):
             print(f"{i=}")
             # initial condition
@@ -39,12 +39,12 @@ def test_online_linear_model():
             y = C.dot(x) + D.dot(u)
 
             # update model est
-            online_linear_model.update(x, u, xn, y)
+            olm.update(x, u, xn, y)
             if i >= 2 * max(n, n + k, m):
-                assert np.linalg.norm(online_linear_model.A - A) / (n * n) < 1e-3
-                assert np.linalg.norm(online_linear_model.B - B) / (n * k) < 1e-3
-                assert np.linalg.norm(online_linear_model.C - C) / (m * n) < 1e-3
-                assert np.linalg.norm(online_linear_model.D - D) / (m * k) < 1e-3
+                assert np.linalg.norm(olm.A - A) / (n * n) < 1e-3
+                assert np.linalg.norm(olm.B - B) / (n * k) < 1e-3
+                assert np.linalg.norm(olm.C - C) / (m * n) < 1e-3
+                assert np.linalg.norm(olm.D - D) / (m * k) < 1e-3
 
             # update time-varying model
             A = update(A)

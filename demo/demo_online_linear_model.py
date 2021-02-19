@@ -47,8 +47,8 @@ def dyn(t, x, u):
 # set up simulation parameter
 dt = 0.1
 tmax, tc = 20, 0.5
-kmax, kc = int(tmax / dt), int(tc / dt)
-tspan = np.linspace(0, tmax, kmax + 1)
+T, kc = int(tmax / dt), int(tc / dt)
+tspan = np.linspace(0, tmax, T + 1)
 
 # dimensions
 n = 2
@@ -59,20 +59,20 @@ alpha = 0.01 ** (2.0 / kc)
 olm = OnlineLinearModel(n, k, None, alpha)
 
 # store data mtrices
-x = np.zeros([n, kmax])
-u = np.zeros([k, kmax])
+x = np.zeros([n, T])
+u = np.zeros([k, T])
 
 # initial condition, state and control
 x[:, 0] = np.array([1, 0])
 u[:, 0] = np.array([0])
 
 # system simulation
-for k in range(1, kmax):
+for t in range(1, T):
     # forward the system for one step
-    x[:, k] = x[:, k - 1] + dt * dyn(k * dt, x[:, k - 1], u[:, k - 1])
+    x[:, t] = x[:, t - 1] + dt * dyn(t * dt, x[:, t - 1], u[:, t - 1])
     # use new measurement to update online system identification
-    olm.update(x[:, k - 1], u[:, k - 1], x[:, k])
-    if k > 2 * max(n, n + k):
+    olm.update(x[:, t - 1], u[:, t - 1], x[:, t])
+    if t > 2 * max(n, n + k):
         # get LQR gain, output = state
         sys = StateSpace(olm.A, olm.B, np.eye(n), np.zeros(n, k), dt=True)
         K, S, E = lqr(sys, np.eye(n), np.eye(k))
