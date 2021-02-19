@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 class OnlineLinearModel:
     def __init__(self, n: int, k: int, m: int=None, alpha: float=1.0):
         """Online Linear Model
+        Learn adaptive LTI model
 
         Args:
             n (int): state dimension
@@ -24,18 +25,18 @@ class OnlineLinearModel:
         assert alpha > 0 and alpha <= 1
         
         # set parameters
-        self.n = n
-        self.k = k
-        self.m = m
-        self.alpha = alpha
+        self._n = n
+        self._k = k
+        self._m = m
+        self._alpha = alpha
         
         # additional parameters
-        self.T = 0
-        self.ready = False
+        self._T = 0
+        self._ready = False
         
         # initialize model
         self._f = OnlineModel(n, n + k) # encodes A and B
-        if self.m:
+        if self._m:
             logger.info("Learn x(t+1) = A * x(t) + B * u(t), y(t) = C * x(t) + D * u(t)")
             self._g = OnlineModel(m, n + k) # encodes C and D
         else:
@@ -43,54 +44,74 @@ class OnlineLinearModel:
             
     def update(self, x, u, xn, y=None):
         # input check
-        assert x.shape[0] == self.n
-        assert u.shape[0] == self.k
-        assert xn.shape[0] == self.n
+        assert x.shape[0] == self._n
+        assert u.shape[0] == self._k
+        assert xn.shape[0] == self._n
         if y is None:
-            assert self.m is None
-        if self.m:
-            assert y.shape[0] == self.m
-            
+            assert self._m is None
+        if self._m:
+            assert y.shape[0] == self._m
+        
         # update f
         z = np.concatenate((x, u))
         self._f.update(z, xn)
         
         # update g if needed
-        if self.m:
+        if self._m:
             self._g.update(z, y)
         
         # timestep
-        self.T += 1
+        self._T += 1
         
         # mark model as ready
-        if self.T >= 2 * max(self.n, self.n + self.k, self.m):
-            self.ready = True
+        if self._T >= 2 * max(self._n, self._n + self._k, self._m):
+            self._ready = True
 
-    # can only get A, but can not set A
+    # no setter
+    @property
+    def n(self):
+        return self._n
+    
+    @property
+    def k(self):
+        return self._k
+    
+    @property
+    def m(self):
+        return self._m
+    
+    @property
+    def alpha(self):
+        return self._alpha
+    
+    @property
+    def T(self):
+        return self._T
+    
     @property
     def A(self):
-        if not self.ready:
+        if not self._ready:
             logger.warning(f"Model not ready (have not seen enough data)!")
-        return self._f.A[:, :self.n]
+        return self._f.M[:, :self._n]
 
     @property
     def B(self):
-        if not self.ready:
+        if not self._ready:
             logger.warning(f"Model not ready (have not seen enough data)!")
-        return self._f.A[:, self.n:]
+        return self._f.M[:, self._n:]
     
     @property
     def C(self):
-        if not self.m:
+        if not self._m:
             raise Exception(f"No output eqution!")
-        if not self.ready:
+        if not self._ready:
             logger.warning(f"Model not ready (have not seen enough data)!")
-        return self._g.A[:, :self.n]
+        return self._g.M[:, :self._n]
     
     @property
     def D(self):
-        if not self.m:
+        if not self._m:
             raise Exception(f"No output eqution!")
-        if not self.ready:
+        if not self._ready:
             logger.warning(f"Model not ready (have not seen enough data)!")
-        return self._g.A[:, self.n:]
+        return self._g.M[:, self._n:]

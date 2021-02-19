@@ -25,7 +25,7 @@ def test_online_model():
             y = A.dot(x)
             online_model.update(x, y)
             if i >= 2 * q:
-                assert np.linalg.norm(online_model.A - A) / (n * q) < 1e-3
+                assert np.linalg.norm(online_model.M - A) / (n * q) < 1e-3
                 
             # update time-varying model
             A = update(A)
