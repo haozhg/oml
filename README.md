@@ -1,7 +1,15 @@
 # osysid
 Python/Matlab implementation of online system identification
 
+## Highlights
+- Efficiently online linear model learning
+- Optimal in terms of both time and space complexity
+
 ## Online system identification algorithm description
+### Online linear model learning
+
+
+### Online Nonlinear model learning
 Suppose that we have a nonlinear and time-varying system z(k) =
 f(t(k-1),z(k-1),u(k-1)). We aim to build local linear model in the form
 of z(k) = F(z(k),t(k)) z(k-1) + G(z(k),t(k)) u(k-1), where F(z(k),t(k)), 
@@ -31,32 +39,50 @@ and real-time control.
 The time complexity (multiply–add operation for one iteration) is O(n^2), and space complexity is O(n^2), where n is the problem dimension.  
 
 ## Installation
-Download online system identification implementation from github
-`git clone https://github.com/haozhg/osysid.git`
+### pip
+```
+pip install osysid
+```
 
-## Implementation
-1.**OnlineSysId.m** implements **OnlineSysId** class in Matlab.   
-3.**onlinesysid.py** implements **OnlineSysId** class in Python.  
+### Manual install
+```
+git clone https://github.com/haozhg/osysid.git
+cd osysid/
+pip install -e .
+```
 
-## Documentation
-Matlab:  
-type **help OnlineSysId** for **OnlineSysId** class documentation.  
-Python:  
-type **help(onlinesysid.OnlineSysId)** for **OnlineSysId** class documentation.  
-
-## Demos
-1.**OnlineSysId_demo.m** demos the use of Matlab **OnlineSysId** class.  
-3.**onlinesysid_demo.py** demos the use of Python **OnlineSysId** class.  
+### Tests
+```
+cd osysid/
+python -m pytest .
+```
 
 ## Authors:
-Hao Zhang  
-Clarence W. Rowley
+Hao Zhang 
 
-## Reference:
-Hao Zhang, Clarence W. Rowley,
-``Real-time control of nonlinear and time-varying systems based on 
-online linear system identification", in production, 2017.
+## Reference
+If you you used these algorithms or this python package in your work, please consider citing
 
-## Date created:
-June 2017
+```
+Zhang, Hao, Clarence W. Rowley, Eric A. Deem, and Louis N. Cattafesta. "Online dynamic mode decomposition for time-varying systems." SIAM Journal on Applied Dynamical Systems 18, no. 3 (2019): 1586-1609.
+```
 
+BibTeX
+```
+@article{zhang2019online,
+  title={Online dynamic mode decomposition for time-varying systems},
+  author={Zhang, Hao and Rowley, Clarence W and Deem, Eric A and Cattafesta, Louis N},
+  journal={SIAM Journal on Applied Dynamical Systems},
+  volume={18},
+  number={3},
+  pages={1586--1609},
+  year={2019},
+  publisher={SIAM}
+}
+```
+
+## Date created
+April 2017
+
+## License
+If you want to use this package, but find license permission an issue, pls contact me at `haozhang at alumni dot princeton dot edu`.

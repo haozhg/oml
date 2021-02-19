@@ -23,7 +23,7 @@ class OnlineSysId:
     Then we have access to x(j), y(j), j=1,1,2,...k. We define two matrices
     X(k) = [x(1),x(2),...,x(k)], Y(k) = [y(1),y(2),...,y(k)], that contain 
     all the past snapshot. The best fit to the data is Ak = Yk*pinv(Xk).
-    An exponential weighting factor rho=sigma^2 (0<rho<=1) that places more 
+    An exponential alpha factor rho=sigma^2 (0<rho<=1) that places more 
     weight on recent data can be incorporated into the definition of X(k) and
     Y(k) such that X(k) = [sigma^(k-1)*x(1),sigma^(k-2)*x(2),...,
     sigma^(1)*x(k-1),x(k)], Y(k) = [sigma^(k-1)*y(1),sigma^(k-2)*y(2),...,
@@ -37,7 +37,7 @@ class OnlineSysId:
     and real-time control.
     
     Usage:
-    osysid = OnlineSysId(n,q,weighting)
+    osysid = OnlineSysId(n,q,alpha)
     osysid.initialize(X0,Y0)
     osysid.initilizeghost()
     osysid.update(x,y)
@@ -46,7 +46,7 @@ class OnlineSysId:
     n: state dimension
     q: observable vector dimension, state dimension + control dimension for
     linear system identification case
-    weighting: weighting factor in (0,1]
+    alpha: alpha factor in (0,1]
     timestep: number of snapshot pairs processed
     A: general DMD matrix, size n by q
     P: matrix that contains information about past snapshots, size q by q
@@ -74,14 +74,14 @@ class OnlineSysId:
     To look up this documentation, type help(onlinesysid.OnlineSysId) or 
     onlinesysid.OnlineSysId?
     """
-    def __init__(self, n=0, q=0, weighting=1):
+    def __init__(self, n=0, q=0, alpha=1):
         """
         Creat an object for online system identification class OnlineSysId
-        Usage: osysid = OnlineSysId(n,q,weighting)
+        Usage: osysid = OnlineSysId(n,q,alpha)
             """
         self.n = n
         self.q = q
-        self.weighting = weighting
+        self.alpha = alpha
         self.timestep = 0
         self.A = np.zeros([n,q])
         self.P = np.zeros([q,q])
@@ -92,10 +92,10 @@ class OnlineSysId:
         """
         k0 = len(X0[0,:])
         if self.timestep == 0 and np.linalg.matrix_rank(X0) == self.q:
-            weight = np.sqrt(self.weighting)**range(k0-1,-1,-1)
+            weight = np.sqrt(self.alpha)**range(k0-1,-1,-1)
             X0hat, Y0hat = weight*X0, weight*Y0
             self.A = Y0hat.dot(np.linalg.pinv(X0hat))
-            self.P = np.linalg.inv(X0hat.dot(X0hat.T))/self.weighting
+            self.P = np.linalg.inv(X0hat.dot(X0hat.T))/self.alpha
             self.timestep += k0
             
     def initializeghost(self):
@@ -120,7 +120,7 @@ class OnlineSysId:
         # update A
         self.A += np.outer(gamma*(y-self.A.dot(x)),Px)
         # update P, group Px*Px' to ensure positive definite
-        self.P = (self.P - gamma*np.outer(Px,Px))/self.weighting
+        self.P = (self.P - gamma*np.outer(Px,Px))/self.alpha
         # ensure P is SPD by taking its symmetric part
         self.P = (self.P + self.P.T)/2
         # time step + 1
