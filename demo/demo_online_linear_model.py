@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 """
 An example to demonstrate online linear system identification
 
-We demonstrate the use of OnlineSysId class with a simple linear system.
+We demonstrate the use of OnlineLinearModel class with a simple linear system.
 Take a 2D time-varying system dz/dt=A(t)z(t)+B(t)u(t), where A(t) and B(t)
 are slowly varying with time. In particular, we take A(t)=(1+eps*t)*A0,
 B(t)=(1+eps*t)*B0, and eps = 0.1 is small. It is discretize with
@@ -26,38 +25,38 @@ by efficient rank-1 updating online DMD algorithm.
 
 Authors: 
 Hao Zhang
-Clarence W. Rowley
 
-Reference:
-Hao Zhang, Clarence W. Rowley,
-``Real-time control of nonlinear and time-varying systems based on 
-online linear system identification", in production, 2017.
+References:
+Zhang, Hao, Clarence W. Rowley, Eric A. Deem, and Louis N. Cattafesta.
+"Online dynamic mode decomposition for time-varying systems."
+SIAM Journal on Applied Dynamical Systems 18, no. 3 (2019): 1586-1609.
 
 Created:
 June 2017.
 """
 
 
-import sys
-sys.path.append('..')
-
-from onlinesysid import OnlineSysId
-import numpy as np
 import matplotlib.pyplot as plt
-
+import numpy as np
+from osysid import OnlineLinearModel
 
 # define dynamics
-A0 = np.array([[0,1],[-1,-0.1]])
-B0 = np.array([[0],[1]])
+A0 = np.array([[0, 1], [-1, -0.1]])
+B0 = np.array([[0], [1]])
 epsilon = 1e-1
-def dyn(t,z,u):
-    dzdt = (1+epsilon*t)*A0.dot(z) + (1+epsilon*t)*B0.dot(u)
+
+
+def dyn(t, z, u):
+    dzdt = (1 + epsilon * t) * A0.dot(z) + (1 + epsilon * t) * B0.dot(u)
     return dzdt
+
+
 # set up simulation parameter
 dt = 0.1
 tmax, tc = 10, 0.5
-kmax, kc = int(tmax/dt), int(tc/dt)
-tspan = np.linspace(0,tmax,kmax+1)
+kmax, kc = int(tmax / dt), int(tc / dt)
+tspan = np.linspace(0, tmax, kmax + 1)
+
 # control input sine wave
 gamma = 1
 omega = 5
@@ -65,63 +64,63 @@ omega = 5
 n = 2
 p = 1
 q = n + p
+
 # online linear system identification setup
-weighting = 0.01**(2.0/kc)
-osysid = OnlineSysId(n,q,weighting)
-osysid.initializeghost()
+alpha = 0.01 ** (2.0 / kc)
+osysid = OnlineLinearModel(n, q, alpha)
 # store data mtrices
-x, y = np.zeros([q,kmax]), np.zeros([n,kmax])
+x, y = np.zeros([q, kmax]), np.zeros([n, kmax])
 Aerror, Berror = np.zeros(kmax), np.zeros(kmax)
 
 # initial condition,state and control
-z0 = np.array([[1],[0]])
+z0 = np.array([[1], [0]])
 u0 = np.array([[0.0]])
 zk, uk = z0, u0
 # system simulation
 for k in range(kmax):
     # update state x(k) = [z(k-1);u(k-1)]
-    x[:,k] = np.vstack((zk,uk)).reshape(q)
+    x[:, k] = np.vstack((zk, uk)).reshape(q)
     # forward the system for one step
-    zk = zk + dt*dyn(k*dt,zk,uk)
+    zk = zk + dt * dyn(k * dt, zk, uk)
     # update control input according to sine wave
-    uk = np.array([[gamma*np.sin(omega*(k+1)*dt)]])
+    uk = np.array([[gamma * np.sin(omega * (k + 1) * dt)]])
     # update state y(k) = z(k)
-    y[:,k] = zk.reshape(n)
+    y[:, k] = zk.reshape(n)
     # use new data to update online system identification
-    osysid.update(x[:,k],y[:,k])
+    osysid.update(x[:, k], y[:, k])
     # model error at time k
-    Ak = np.identity(n)+dt*(1+epsilon*(k+1)*dt)*A0
-    Bk = dt*(1+epsilon*(k+1)*dt)*B0
-    Aerror[k] = np.linalg.norm(osysid.A[:,:n]-Ak,'fro')/np.linalg.norm(Ak,'fro')
-    Berror[k] = np.linalg.norm(osysid.A[:,n:]-Bk,'fro')/np.linalg.norm(Bk,'fro')
+    Ak = np.identity(n) + dt * (1 + epsilon * (k + 1) * dt) * A0
+    Bk = dt * (1 + epsilon * (k + 1) * dt) * B0
+    Aerror[k] = np.linalg.norm(osysid.A[:, :n] - Ak, "fro") / np.linalg.norm(Ak, "fro")
+    Berror[k] = np.linalg.norm(osysid.A[:, n:] - Bk, "fro") / np.linalg.norm(Bk, "fro")
 
 # visualize snapshots
 plt.figure()
-plt.rc('text', usetex=True)
-plt.rc('font', family='serif')
-plt.plot(tspan[1:], y[0,:], 'bs-', linewidth=2.0,  label='$z_1(t)$')
-plt.plot(tspan[1:], y[1,:], 'g^-', linewidth=2.0,  label='$z_2(t)$')
-plt.plot(tspan[1:], x[2,:], 'rd-', linewidth=2.0,  label='$u(t)$')
-plt.legend(loc='best',fontsize=20 ,shadow=True)
-plt.xlabel('Time', fontsize=20)
-plt.title('Snapshots', fontsize=20)
+plt.rc("text", usetex=True)
+plt.rc("font", family="serif")
+plt.plot(tspan[1:], y[0, :], "bs-", linewidth=2.0, label="$z_1(t)$")
+plt.plot(tspan[1:], y[1, :], "g^-", linewidth=2.0, label="$z_2(t)$")
+plt.plot(tspan[1:], x[2, :], "rd-", linewidth=2.0, label="$u(t)$")
+plt.legend(loc="best", fontsize=20, shadow=True)
+plt.xlabel("Time", fontsize=20)
+plt.title("Snapshots", fontsize=20)
 plt.tick_params(labelsize=20)
 plt.grid()
-plt.xlim([0,10])
-plt.ylim([-2,2])
+plt.xlim([0, 10])
+plt.ylim([-2, 2])
 plt.show()
 
 # visualize model error
 plt.figure()
-plt.rc('text', usetex=True)
-plt.rc('font', family='serif')
-plt.plot(tspan[1:], Aerror, 'bs-', linewidth=2.0,  label='\% error in $A(t)$')
-plt.plot(tspan[1:], Berror, 'g^-', linewidth=2.0,  label='\% error in $B(t)$')
-plt.legend(loc='best',fontsize=20 ,shadow=True)
-plt.xlabel('Time', fontsize=20)
-plt.title('Online DMD model error', fontsize=20)
+plt.rc("text", usetex=True)
+plt.rc("font", family="serif")
+plt.plot(tspan[1:], Aerror, "bs-", linewidth=2.0, label="\% error in $A(t)$")
+plt.plot(tspan[1:], Berror, "g^-", linewidth=2.0, label="\% error in $B(t)$")
+plt.legend(loc="best", fontsize=20, shadow=True)
+plt.xlabel("Time", fontsize=20)
+plt.title("Online DMD model error", fontsize=20)
 plt.tick_params(labelsize=20)
 plt.grid()
-plt.xlim([0,10])
-plt.ylim([0,0.2])
+plt.xlim([0, 10])
+plt.ylim([0, 0.2])
 plt.show()

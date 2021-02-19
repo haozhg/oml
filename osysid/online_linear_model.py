@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 class OnlineLinearModel:
-    def __init__(self, n: int, k: int, m: int=None, alpha: float=1.0):
+    def __init__(self, n: int, k: int, m: int = None, alpha: float = 1.0):
         """Online Linear Model
         Learn adaptive LTI model
 
@@ -23,25 +23,25 @@ class OnlineLinearModel:
         assert isinstance(k, int) and k >= 1
         assert m is None or (isinstance(m, int) and m >= 1)
         assert alpha > 0 and alpha <= 1
-        
+
         # set parameters
         self._n = n
         self._k = k
         self._m = m
         self._alpha = alpha
-        
+
         # additional parameters
         self._T = 0
         self._ready = False
-        
+
         # initialize model
-        self._f = OnlineModel(n, n + k) # encodes A and B
+        self._f = OnlineModel(n, n + k)  # encodes A and B
         if self._m:
             logger.info("Learn x(t+1) = A * x(t) + B * u(t), y(t) = C * x(t) + D * u(t)")
-            self._g = OnlineModel(m, n + k) # encodes C and D
+            self._g = OnlineModel(m, n + k)  # encodes C and D
         else:
             logger.info("No output eqution, only learn x(t+1) = A * x(t) + B * u(t)")
-            
+
     def update(self, x, u, xn, y=None):
         # input check
         assert x.shape[0] == self._n
@@ -51,18 +51,18 @@ class OnlineLinearModel:
             assert self._m is None
         if self._m:
             assert y.shape[0] == self._m
-        
+
         # update f
         z = np.concatenate((x, u))
         self._f.update(z, xn)
-        
+
         # update g if needed
         if self._m:
             self._g.update(z, y)
-        
+
         # timestep
         self._T += 1
-        
+
         # mark model as ready
         if self._T >= 2 * max(self._n, self._n + self._k, self._m):
             self._ready = True
@@ -71,47 +71,47 @@ class OnlineLinearModel:
     @property
     def n(self):
         return self._n
-    
+
     @property
     def k(self):
         return self._k
-    
+
     @property
     def m(self):
         return self._m
-    
+
     @property
     def alpha(self):
         return self._alpha
-    
+
     @property
     def T(self):
         return self._T
-    
+
     @property
     def A(self):
         if not self._ready:
             logger.warning(f"Model not ready (have not seen enough data)!")
-        return self._f.M[:, :self._n]
+        return self._f.M[:, : self._n]
 
     @property
     def B(self):
         if not self._ready:
             logger.warning(f"Model not ready (have not seen enough data)!")
-        return self._f.M[:, self._n:]
-    
+        return self._f.M[:, self._n :]
+
     @property
     def C(self):
         if not self._m:
             raise Exception(f"No output eqution!")
         if not self._ready:
             logger.warning(f"Model not ready (have not seen enough data)!")
-        return self._g.M[:, :self._n]
-    
+        return self._g.M[:, : self._n]
+
     @property
     def D(self):
         if not self._m:
             raise Exception(f"No output eqution!")
         if not self._ready:
             logger.warning(f"Model not ready (have not seen enough data)!")
-        return self._g.M[:, self._n:]
+        return self._g.M[:, self._n :]

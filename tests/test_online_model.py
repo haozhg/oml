@@ -12,10 +12,10 @@ def test_online_model():
     for n in range(2, 10):
         q = 2 * n
         m = 16 * n
-        
+
         # true model, slowly varying in time
         A = np.random.randn(n, q)
-        
+
         # online model learning
         # no need to initialize
         online_model = OnlineModel(n, q, alpha=0.5)
@@ -26,6 +26,6 @@ def test_online_model():
             online_model.update(x, y)
             if i >= 2 * q:
                 assert np.linalg.norm(online_model.M - A) / (n * q) < 1e-3
-                
+
             # update time-varying model
             A = update(A)

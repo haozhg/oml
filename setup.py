@@ -22,8 +22,5 @@ setup(
     ],
     packages=["osysid"],
     include_package_data=False,
-    install_requires=[
-        "numpy",
-        "control"
-    ],
+    install_requires=["numpy", "control"],
 )

@@ -18,13 +18,13 @@ def test_online_linear_model():
         m = n // 2
         print(f"{n=},{k=},{m=}")
         T = 16 * n
-        
+
         # true model, slowly varying in time
         A = np.random.randn(n, n)
         B = np.random.randn(n, k)
         C = np.random.randn(m, n)
         D = np.random.randn(m, k)
-        
+
         # online linear model learning
         # no need to initialize
         online_linear_model = OnlineLinearModel(n, k, m, alpha=0.5)
@@ -33,11 +33,11 @@ def test_online_linear_model():
             # initial condition
             x = np.random.randn(n)
             u = np.random.randn(k)
-            
+
             # state update
             xn = A.dot(x) + B.dot(u)
             y = C.dot(x) + D.dot(u)
-            
+
             # update model est
             online_linear_model.update(x, u, xn, y)
             if i >= 2 * max(n, n + k, m):
@@ -45,13 +45,13 @@ def test_online_linear_model():
                 assert np.linalg.norm(online_linear_model.B - B) / (n * k) < 1e-3
                 assert np.linalg.norm(online_linear_model.C - C) / (m * n) < 1e-3
                 assert np.linalg.norm(online_linear_model.D - D) / (m * k) < 1e-3
-            
+
             # update time-varying model
             A = update(A)
             B = update(B)
             C = update(C)
             D = update(D)
-            
+
+
 if __name__ == "__main__":
     test_online_linear_model()
-    
