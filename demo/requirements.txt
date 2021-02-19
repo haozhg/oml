@@ -1,0 +1,5 @@
+osysid
+numpy
+scipy
+matplotlib
+control
