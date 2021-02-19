@@ -6,35 +6,42 @@ logger = logging.getLogger(__name__)
 
 
 class OnlineModel:
-    """OnlineModel is a class that implements online dynamic mode decomposition
+    """OnlineModel is a class that implements online model learning
     The time complexity (multiply–add operation for one iteration) is O(4n^2),
     and space complexity is O(2n^2), where n is the state dimension.
 
     Algorithm description:
+        If the dynamics is z(k) = f(z(k-1),u(k-1)), then we first choose a nonlinear 
+        observable phi(~, ~), and assume the model can be approximated by
+        z(k) = M * phi(z(k-1), u(k-1)).
+        
+        Let x(k) = phi(z(k-1),u(k-1)), and y(k) = z(k).
+        We would like to learn an adaptive linear model M (a matrix) st y(k) = M * x(k).
+        The matrix M is updated recursively by efficient rank-1 updating online algrithm.
+        An exponential alpha factor can be used to place more weight on
+        recent data.
+        
         At time step k, define two matrix X(k) = [x(1),x(2),...,x(k)],
         Y(k) = [y(1),y(2),...,y(k)], that contain all the past snapshot pairs,
         where x(k), y(k) are the n dimensional state vector, y(k) = f(x(k)) is
         the image of x(k), f() is the dynamics.
-        
-        Here, if the (discrete-time) dynamics are given by z(k) = f(z(k-1)),
+
+        Here, if there is no control and dynamics is z(k) = f(z(k-1)),
         then x(k), y(k) should be measurements correponding to consecutive
         states z(k-1) and z(k).
         
-        We would like to learn an adaptive linear model M st y(k) = M * x(k).
-        The matrix M is updated recursively by efficient rank-1 updating online algrithm.
-        An exponential alpha factor can be used to place more weight on
-        recent data.
-
     Usage:
         online_model = OnlineModel(n, alpha)
         online_model.initialize(X, Y) # optional
         online_model.update(x, y)
 
     properties:
+        M: the model matrix (adaptive and updated online)
         n: state dimension
+        q: observable vector dimension, state dimension + control dimension for
+           linear system identification case
         alpha: weight factor in (0,1]
-        timestep: number of snapshot pairs processed (i.e., current time step)
-        A: Model matrix, size n by q
+        T: number of snapshot pairs processed (i.e., current time step)
         
     methods:
         initialize(X, Y), initialize online model learning algorithm with first m
