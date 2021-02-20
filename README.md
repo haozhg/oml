@@ -1,5 +1,5 @@
 # osysid
-Efficient online adaptive linear/nonlinear system identification and control
+Efficient adaptive online linear/nonlinear model learning (system identification) and control
 
 To get started,
 ```
@@ -22,7 +22,7 @@ Suppose we have a (discrete) nonlinear and/or time-varying [dynamical system](ht
 - x(t+1) = f(t, x(t), u(t))
 - y(t) = g(t, x(t), u(t))
 
-where t is (discrete) time, x(t) is state vector, u(t) is control (input) vector, y(t) is observation (output) vector. f(~, ~, ~) and g(~, ~, ~) are unknown vector-valued nonlinear functions.
+where t is (discrete) time, x(t) is state vector, u(t) is control (input) vector, y(t) is observation (output) vector. f(~, ~, \~) and g(~, ~, \~) are unknown vector-valued nonlinear functions.
 
 - It is assumed that we have measurements x(t), u(t), y(t) for t = 0,1,...T. 
 - However, we do not know functions f and g. 
@@ -47,7 +47,7 @@ In particular, we want to fit a nonlinear model of this form
 - x(t+1) = F * phi(x(t), u(t))
 - y(t) = G * psi(x(t), u(t))
 
-where phi(~, ~) and psi(~, ~) are known vector-valued nonlinear functions (e.g, quadratic) that we specify, F and G are unknown matrices of proper size. 
+where phi(~, \~) and psi(~, \~) are known vector-valued nonlinear functions (e.g, quadratic) that we specify, F and G are unknown matrices of proper size. 
 
 - We aim to learn F and G from measurement data. 
 - Notice that this model form is general, and encompass many systems such as Lorenze attractor, Logistic map, Auto-regressive model, polynomial systems.

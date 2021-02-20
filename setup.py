@@ -8,7 +8,7 @@ with open("README.md", "r") as f:
 setup(
     name="osysid",
     version="0.1.0",
-    description="Efficient adaptive online model learning (system identification) and control",
+    description="Efficient adaptive online linear/nonlinear model learning (system identification) and control",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/haozhg/osysid",
