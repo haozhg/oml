@@ -11,15 +11,20 @@ This algorithm is based on the online dynamic mode decomposition algorithm, whic
 Lorenz system is one of the most classical nonlinear dynamical systems. Here we show how the proposed algorithm can be used to controll that.
 
 ### No control
+Here is the state evolution when control if off, we can see the classical butterfly trajectory.
+
 <p float="center">
-  <img src="assets/lorenz_state.png" width="400" />
-  <img src="assets/lorenz_control.png" width="400" /> 
+  <img src="assets/lorenz_state.png" width="300" />
+  <img src="assets/lorenz_control.png" width="300" /> 
 </p>
 
 ### With control
-Data-driven real-time closed loop control
-![Lorenz state no control](https://github.com/haozhg/osysid/blob/master/assets/lorenz_state.png)
+If we apply data-driven real-time closed loop control, it can be stabilized at a unstable fixed point.
 
+<p float="center">
+  <img src="assets/lorenz_state_controlled.png" width="300" />
+  <img src="assets/lorenz_control_controlled.png" width="300" /> 
+</p>
 
 ## Highlights
 - Efficiently online adaptive linear/nonlinear model learning. Any nonlinear and/or time-varying system is locally linear, as long as the model is updated in real-time wrt to measurement.
