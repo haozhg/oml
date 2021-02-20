@@ -2,7 +2,7 @@ import logging
 
 import numpy as np
 
-from .online_model import OnlineModel
+from ._online_model import OnlineModel
 
 logger = logging.getLogger(__name__)
 

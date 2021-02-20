@@ -1,2 +1,2 @@
-from .online_model import OnlineModel
-from .online_linear_model import OnlineLinearModel
+from ._online_model import OnlineModel
+from ._online_linear_model import OnlineLinearModel
