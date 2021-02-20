@@ -10,8 +10,8 @@ logger = logging.getLogger(__name__)
 class OnlineLinearModel:
     def __init__(self, n: int, k: int, m: int = None, alpha: float = 1.0):
         """Online Linear Model
-        Learn adaptive LTI model
-
+        Efficiently learn adaptive linear model from data in real-time
+        
         Args:
             n (int): state dimension
             k (int): control (input) dimension

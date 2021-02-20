@@ -11,24 +11,24 @@ class OnlineModel:
     and space complexity is O(2n^2), where n is the state dimension.
 
     Algorithm description:
-        If the dynamics is z(k) = f(z(k-1),u(k-1)), then we first choose a nonlinear
+        If the dynamics is z(t) = f(z(t-1), u(t-1)), then we first choose a nonlinear
         observable phi(~, ~), and assume the model can be approximated by
-        z(k) = M * phi(z(k-1), u(k-1)).
+        z(t) = M * phi(z(t-1), u(t-1)).
 
-        Let x(k) = phi(z(k-1),u(k-1)), and y(k) = z(k).
-        We would like to learn an adaptive linear model M (a matrix) st y(k) = M * x(k).
+        Let x(t) = phi(z(t-1), u(t-1)), and y(t) = z(t).
+        We would like to learn an adaptive linear model M (a matrix) st y(t) = M * x(t).
         The matrix M is updated recursively by efficient rank-1 updating online algrithm.
         An exponential alpha factor can be used to place more weight on
         recent data.
 
-        At time step k, define two matrix X(k) = [x(1),x(2),...,x(k)],
-        Y(k) = [y(1),y(2),...,y(k)], that contain all the past snapshot pairs,
-        where x(k), y(k) are the n dimensional state vector, y(k) = f(x(k)) is
-        the image of x(k), f() is the dynamics.
+        At time step t, define two matrix X(t) = [x(1),x(2),...,x(t)],
+        Y(t) = [y(1),y(2),...,y(t)], that contain all the past snapshot pairs,
+        where x(t), y(t) are the n dimensional state vector, y(t) = f(x(t)) is
+        the image of x(t), f() is the dynamics.
 
-        Here, if there is no control and dynamics is z(k) = f(z(k-1)),
-        then x(k), y(k) should be measurements correponding to consecutive
-        states z(k-1) and z(k).
+        Here, if there is no control and dynamics is z(t) = f(z(t-1)),
+        then x(t), y(t) should be measurements correponding to consecutive
+        states z(t-1) and z(t).
 
     Usage:
         online_model = OnlineModel(n, alpha)
@@ -46,7 +46,7 @@ class OnlineModel:
     methods:
         initialize(X, Y), initialize online model learning algorithm with first m
                             snapshot pairs stored in (X, Y), this func call is optional
-        update(x,y), update online adaptive model when new snapshot pair (x,y)
+        update(x,y), update online adaptive model when new snapshot pair (x, y)
                             becomes available
 
     Authors:
@@ -61,7 +61,7 @@ class OnlineModel:
     def __init__(self, n: int, q: int, alpha: float = 1.0):
         """
         Creat an object for online model learning
-        Usage: online_model = OnlineModel(n,alpha)
+        Usage: online_model = OnlineModel(n, alpha)
         """
         # input check
         assert isinstance(n, int) and n >= 1
@@ -110,11 +110,11 @@ class OnlineModel:
         self._T += m
 
     def update(self, x, y):
-        """Update the Model with a new pair of snapshots (x,y)
+        """Update the Model with a new pair of snapshots (x, y)
         y = f(x) is the dynamics/model
-        Here, if the (discrete-time) dynamics are given by z(k) = f(z(k-1)),
+        Here, if the (discrete-time) dynamics are given by z(t) = f(z(t-1)),
         then (x,y) should be measurements correponding to consecutive states
-        z(k-1) and z(k).
+        z(t-1) and z(t).
         Usage: online_model.update(x, y)
         """
         # input check

@@ -8,7 +8,7 @@ with open("README.md", "r") as f:
 setup(
     name="osysid",
     version="0.1.0",
-    description="Online System Identification",
+    description="Efficient adaptive online model learning (system identification) and control",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/haozhg/osysid",
@@ -22,5 +22,5 @@ setup(
     ],
     packages=["osysid"],
     include_package_data=False,
-    install_requires=["numpy", "control"],
+    install_requires=["numpy"],
 )

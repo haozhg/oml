@@ -13,11 +13,12 @@ def update(A, eps=1e-9):
 
 
 def test_online_linear_model():
+    # n is state dimension
     for n in range(2, 10):
-        k = n // 2
-        m = n // 2
-        print(f"{n=},{k=},{m=}")
-        T = 16 * n
+        k = n // 2 # control dimension
+        m = n // 2 # observation dimension
+        T = 16 * n # total number of measurements
+        print(f"{n=}, {k=}, {m=}, {T=}")
 
         # true model, slowly varying in time
         A = np.random.randn(n, n)
@@ -28,8 +29,7 @@ def test_online_linear_model():
         # online linear model learning
         # no need to initialize
         olm = OnlineLinearModel(n, k, m, alpha=0.5)
-        for i in range(T):
-            print(f"{i=}")
+        for t in range(T):
             # initial condition
             x = np.random.randn(n)
             u = np.random.randn(k)
@@ -40,7 +40,7 @@ def test_online_linear_model():
 
             # update model est
             olm.update(x, u, xn, y)
-            if i >= 2 * max(n, n + k, m):
+            if t >= 2 * max(n, n + k, m):
                 assert np.linalg.norm(olm.A - A) / (n * n) < 1e-3
                 assert np.linalg.norm(olm.B - B) / (n * k) < 1e-3
                 assert np.linalg.norm(olm.C - C) / (m * n) < 1e-3

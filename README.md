@@ -1,48 +1,61 @@
 # osysid
-Efficient online adaptive linear/nonlinear system identification and control.
+Efficient online adaptive linear/nonlinear system identification and control
+
+To get started,
 ```
 pip install osysid
 ```
+This algorithm is based on the online dynamic mode decomposition algorithm, which is also available as a python package `pip install odmd`, see [here](https://github.com/haozhg/odmd).
 
 ## Highlights
 - Efficiently online adaptive linear/nonlinear model learning. Any nonlinear and/or time-varying system is locally linear, as long as the model is updated in real-time wrt to measurement.
-- Optimal in terms of both time and space complexity. 
-- The time complexity (multiply–add operation for one iteration) is O(n^2)
-- Space complexity is O(n^2), where n is the problem dimension. 
+- Optimal in terms of both time and space complexity. The time complexity (multiply–add operation for one iteration) is O(n^2), and space complexity is O(n^2), where n is the problem dimension.
 - This local model can be used for short-horizon prediction 
-and real-time control.
+and real-time closed loop control.
 - A weighting factor (in (0, 1]) can be used to place more weight on recent data, thus making the model more adaptive.
 
 ## Online system identification algorithm description
-For more details, see this [paper](https://epubs.siam.org/doi/pdf/10.1137/18M1192329).
+This is a brief introduction to the algorithm. For full technical details, see this [paper](https://epubs.siam.org/doi/pdf/10.1137/18M1192329), and chapter 3 and chapter 7 of this [PhD thesis](http://arks.princeton.edu/ark:/88435/dsp0108612r49q).
 
 ### Unknown dynamical system
-Suppose we have a (discrete) nonlinear and time-varying system ([wikipedia](https://en.wikipedia.org/wiki/State-space_representation))
-- x(k+1) = f(t(k), x(k), u(k))
-- y(k) = g(t(k), x(k), u(k))
+Suppose we have a (discrete) nonlinear and/or time-varying [dynamical system](https://en.wikipedia.org/wiki/State-space_representation), and the state space representation is
+- x(t+1) = f(t, x(t), u(t))
+- y(t) = g(t, x(t), u(t))
 
-and we have measurements x(k), u(k), y(k) for k = 0,1,...T
+where t is (discrete) time, x(t) is state vector, u(t) is control (input) vector, y(t) is observation (output) vector. f(~, ~, ~) and g(~, ~, ~) are unknown vector-valued nonlinear functions.
+
+- It is assumed that we have measurements x(t), u(t), y(t) for t = 0,1,...T. 
+- However, we do not know functions f and g. 
+- We aim to learn a model for the unknown dynamical system from measurement data up to time T.
+- We want to the model to be updated efficiently in real-time as new measurement data becomes available.
 
 ### Online linear model learning
-We would like to learn an adaptive linear model ([wikipedia](https://en.wikipedia.org/wiki/State-space_representation))
-- x(k+1) = A*x(k) + B*u(k)
-- y(k) = C*x(k) + D*u(k)
+We would like to learn an adaptive [linear model](https://en.wikipedia.org/wiki/State-space_representation)
+- x(k+1) = A x(k) + B u(k)
+- y(k) = C x(k) + D u(k)
 
-that fits the observation optimally. Based on Taylor expansion, any nonlinear/time-varying system is linear locally. Also, there are many tools for linear control, e.g, [LQR](https://en.wikipedia.org/wiki/Linear%E2%80%93quadratic_regulator), [Kalman filter](https://en.wikipedia.org/wiki/Kalman_filter). However, we need to update this linear model efficiently in real-time whenever new measurement becomes available.
+that fits/explains the observation optimally. By Taylor expansion approximation, any nonlinear and/or time-varying system is linear locally. There are many powerful tools for linear control, e.g, [Linear Quadratic Regulator](https://en.wikipedia.org/wiki/Linear%E2%80%93quadratic_regulator), [Kalman filter](https://en.wikipedia.org/wiki/Kalman_filter). However, to accurately approximate the original (unknown) dynamical system, we need to update this linear model efficiently in real-time whenever new measurement becomes available.
 
-The problem can be formulated as an optimization problem, and at each time step k we need to solve a related but slightly different optimization problem. The optimal algorithm is achived through efficient reformulation of the problem. This package implements this algorithm, and for more detail pls refer to this [paper](https://epubs.siam.org/doi/pdf/10.1137/18M1192329).
+This problem can be formulated as an optimization problem, and at each time step k we need to solve a related but slightly different optimization problem. The optimal algorithm is achived through efficient reformulation of the problem. 
 
+- `osysid.OnlineLinearModel` class implements the optimal algorithm.
 
 ### Online nonlinear model learning
-In case that you want to fit a nonlinear model to the observed data. However, notice that it is not straightforward to justify this choice， since linear adaptive model is good enough as long as it is updated in real-time.
+If we need to fit a nonlinear model to the observed data, this algorithm also applies in this case. However, notice that linear adaptive model is good approximation as long as it is updated in real-time. Also, the choice of nonlinear form can be tricky.
 
-Suppose we want to fit a nonlinear model of this form
-- x(k+1) = F * phi(x(k), u(k))
-- y(k) = G * psi(x(k), u(k))
+In particular, we want to fit a nonlinear model of this form
+- x(t+1) = F * phi(x(t), u(t))
+- y(t) = G * psi(x(t), u(t))
 
-where phi(~, ~) and psi(~, ~) are known nonlinear nonlinear functions (e.g, quadratic), F and G are unknown matrices of proper size. We aim to learn F and G from measurement data. Notice that this model form is general, and encompass many systems such as Lorenze attractor, Logistic map, Auto-regressive model, polynomial systems.
+where phi(~, ~) and psi(~, ~) are known vector-valued nonlinear functions (e.g, quadratic) that we specify, F and G are unknown matrices of proper size. 
+
+- We aim to learn F and G from measurement data. 
+- Notice that this model form is general, and encompass many systems such as Lorenze attractor, Logistic map, Auto-regressive model, polynomial systems.
+- F and G can be updated efficiently in real-time when new data comes in.
 
 This can also be formulated as the same optimization problem, and the same efficient algorithm works in this case.
+
+- `osysid.OnlineModel` class implements the optimal algorithm.
 
 ## Use
 ### install
@@ -67,7 +80,7 @@ python -m pytest .
 ### Demo
 See `./demo` for python notebook to demo the algorithm for data-driven real-time closed loop control.
 - `demo_lorenz.ipynb` shows control of [Lorenz attractor](https://en.wikipedia.org/wiki/Lorenz_system).
-- `demo_online_linear_model.ipynb` shows control of an unstable time-varying linear system.
+- `demo_online_linear_model.ipynb` shows control of an unstable linear time-varying system.
 
 ## Authors:
 Hao Zhang 
@@ -76,7 +89,9 @@ Hao Zhang
 If you you used these algorithms or this python package in your work, please consider citing
 
 ```
-Zhang, Hao, Clarence W. Rowley, Eric A. Deem, and Louis N. Cattafesta. "Online dynamic mode decomposition for time-varying systems." SIAM Journal on Applied Dynamical Systems 18, no. 3 (2019): 1586-1609.
+Zhang, Hao, Clarence W. Rowley, Eric A. Deem, and Louis N. Cattafesta. 
+"Online dynamic mode decomposition for time-varying systems." 
+SIAM Journal on Applied Dynamical Systems 18, no. 3 (2019): 1586-1609.
 ```
 
 BibTeX
