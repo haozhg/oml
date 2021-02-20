@@ -58,10 +58,14 @@ class OnlineModel:
         SIAM Journal on Applied Dynamical Systems 18, no. 3 (2019): 1586-1609.
     """
 
-    def __init__(self, n: int, q: int, alpha: float = 1.0):
-        """
-        Creat an object for online model learning
+    def __init__(self, n: int, q: int, alpha: float = 1.0) -> None:
+        """Creat an object for online model learning
         Usage: online_model = OnlineModel(n, alpha)
+
+        Args:
+            n (int): y dimension in model y(t) = M * x(t)
+            q (int): x dimension in model y(t) = M * x(t)
+            alpha (float, optional): exponential weighting factor in (0, 1], smaller values allows more adaptive learning. Defaults to 1.0.
         """
         # input check
         assert isinstance(n, int) and n >= 1
@@ -80,15 +84,19 @@ class OnlineModel:
         self._initialize()
         self._ready = False
 
-    def _initialize(self):
+    def _initialize(self) -> None:
         """Initialize online model with epsilon small (1e-15) ghost snapshot pairs before t=0"""
         epsilon = 1e-15
         self._A = np.random.randn(self._n, self._q)
         self._P = np.identity(self._q) / epsilon
 
-    def initialize(self, X, Y):
-        """Initialize online model with first m (m >= n, q) snapshot pairs stored in (X, Y)
+    def initialize(self, X: np.ndarray, Y: np.ndarray) -> None:
+        """Initialize online model with first m (m >= max(n, q)) snapshot pairs stored in (X, Y)
         Usage: online_model.initialize(X, Y)
+        
+        Args:
+            X (np.ndarray): 2D array, shape (q, m), matrix [x(0), x(1), ..., x(q)]
+            Y (np.ndarray): 2D array, shape (n, m), matrix [y(0), y(1), ..., y(q)]
         """
         # input check
         assert X is not None and Y is not None
@@ -109,13 +117,17 @@ class OnlineModel:
         self._P = np.linalg.inv(Xhat.dot(Xhat.T)) / self._alpha
         self._T += m
 
-    def update(self, x, y):
+    def update(self, x: np.ndarray, y: np.ndarray) -> None:
         """Update the Model with a new pair of snapshots (x, y)
         y = f(x) is the dynamics/model
         Here, if the (discrete-time) dynamics are given by z(t) = f(z(t-1)),
         then (x,y) should be measurements correponding to consecutive states
         z(t-1) and z(t).
         Usage: online_model.update(x, y)
+
+        Args:
+            x (np.ndarray): 1D array, shape (q, ), x(t)
+            y (np.ndarray): 1D array, shape (n, ) y(t)
         """
         # input check
         assert x is not None and y is not None
@@ -143,23 +155,60 @@ class OnlineModel:
 
     # can only get A, but can not set A
     @property
-    def M(self):
+    def M(self) -> np.ndarray:
+        """Matrix in model y(t) = M * x(t)
+
+        Returns:
+            np.ndarray: [description]
+        """
         if not self._ready:
             logger.warning(f"Model not ready (have not seen enough data)!")
         return self._A
 
     @property
-    def n(self):
+    def n(self) -> int:
+        """y dimension in model y(t) = M * x(t)
+
+        Returns:
+            int: [description]
+        """
         return self._n
 
     @property
-    def q(self):
+    def q(self) -> int:
+        """x dimension in model y(t) = M * x(t)
+
+        Returns:
+            int: [description]
+        """
         return self._q
 
     @property
-    def alpha(self):
+    def alpha(self) -> float:
+        """Exponential weighting factor in (0, 1]
+        Small value allows more adaptive learning and more forgetting
+
+        Returns:
+            float: [description]
+        """
         return self._alpha
 
     @property
-    def T(self):
+    def T(self) -> int:
+        """Total number measurements processed
+        y(t) = M * x(t)
+        x(t), t = 0,1,...,T
+        
+        Returns:
+            int: [description]
+        """
         return self._T
+
+    @property
+    def ready(self) -> bool:
+        """If the model has seen enough data
+
+        Returns:
+            bool: [description]
+        """
+        return self._ready

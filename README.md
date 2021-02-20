@@ -31,12 +31,12 @@ where t is (discrete) time, x(t) is state vector, u(t) is control (input) vector
 
 ### Online linear model learning
 We would like to learn an adaptive [linear model](https://en.wikipedia.org/wiki/State-space_representation)
-- x(k+1) = A x(k) + B u(k)
-- y(k) = C x(k) + D u(k)
+- x(t+1) = A x(t) + B u(t)
+- y(t) = C x(t) + D u(t)
 
 that fits/explains the observation optimally. By Taylor expansion approximation, any nonlinear and/or time-varying system is linear locally. There are many powerful tools for linear control, e.g, [Linear Quadratic Regulator](https://en.wikipedia.org/wiki/Linear%E2%80%93quadratic_regulator), [Kalman filter](https://en.wikipedia.org/wiki/Kalman_filter). However, to accurately approximate the original (unknown) dynamical system, we need to update this linear model efficiently in real-time whenever new measurement becomes available.
 
-This problem can be formulated as an optimization problem, and at each time step k we need to solve a related but slightly different optimization problem. The optimal algorithm is achived through efficient reformulation of the problem. 
+This problem can be formulated as an optimization problem, and at each time step t we need to solve a related but slightly different optimization problem. The optimal algorithm is achived through efficient reformulation of the problem. 
 
 - `osysid.OnlineLinearModel` class implements the optimal algorithm.
 
