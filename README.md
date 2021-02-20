@@ -1,62 +1,115 @@
 # osysid
-Python/Matlab implementation of online system identification
+Efficient adaptive online linear/nonlinear model learning (system identification) and control
+
+To get started,
+```
+pip install osysid
+```
+This algorithm is based on the online dynamic mode decomposition algorithm, which is also available as a python package `pip install odmd`, see [here](https://github.com/haozhg/odmd).
+
+## Highlights
+- Efficiently online adaptive linear/nonlinear model learning. Any nonlinear and/or time-varying system is locally linear, as long as the model is updated in real-time wrt to measurement.
+- Optimal in terms of both time and space complexity. The time complexity (multiply–add operation for one iteration) is O(n^2), and space complexity is O(n^2), where n is the problem dimension.
+- This local model can be used for short-horizon prediction 
+and real-time closed loop control.
+- A weighting factor (in (0, 1]) can be used to place more weight on recent data, thus making the model more adaptive.
 
 ## Online system identification algorithm description
-Suppose that we have a nonlinear and time-varying system z(k) =
-f(t(k-1),z(k-1),u(k-1)). We aim to build local linear model in the form
-of z(k) = F(z(k),t(k)) z(k-1) + G(z(k),t(k)) u(k-1), where F(z(k),t(k)), 
-G(z(k),t(k)) are two matrices. We define x(k) = [z(k-1); u(k-1)], y(k) =
-z(k), and A(k) = [F(z(k),t(k)), G(z(k),t(k))]. Then the local linear 
-model can be written as y(k) = A(k) x(k).  
-We can also build nonlinear model by defining nonlinear observable x(k)
-of state z(k-1) and control u(k-1). For example, for a nonlinear system 
-z(k)=z(k-1)^2+u(k-1)^2, we can define x(k) = [z(k-1)^2;u(k-1)^2], y(k) =
-z(k), then it can be written in linear form y(k) = A*x(k), where A=[1,1].  
-At time step k, we assume that we have access to z(j),u(j),j=0,1,2,...k.
-Then we have access to x(j), y(j), j=1,1,2,...k. We define two matrices
-X(k) = [x(1),x(2),...,x(k)], Y(k) = [y(1),y(2),...,y(k)], that contain 
-all the past snapshot. The best fit to the data is Ak = Yk*pinv(Xk).  
-An exponential weighting factor rho=sigma^2 (0<rho<=1) that places more 
-weight on recent data can be incorporated into the definition of X(k) and
-Y(k) such that X(k) = [sigma^(k-1)*x(1),sigma^(k-2)*x(2),...,
-sigma^(1)*x(k-1),x(k)], Y(k) = [sigma^(k-1)*y(1),sigma^(k-2)*y(2),...,
-sigma^(1)*y(k-1),y(k)].  
-At time step k+1, we need to include new snapshot pair x(k+1), y(k+1).
-We would like to update the general DMD matrix Ak = Yk*pinv(Xk) recursively 
-by efficient rank-1 updating online DMD algorithm.  
-Therefore, A(k) explains the most recent data and is considered to be 
-the local linear model for the original nonlinear and/or time-varying 
-system. This local linear model can be used for short-horizon prediction 
-and real-time control.  
-The time complexity (multiply–add operation for one iteration) is O(n^2), and space complexity is O(n^2), where n is the problem dimension.  
+This is a brief introduction to the algorithm. For full technical details, see this [paper](https://epubs.siam.org/doi/pdf/10.1137/18M1192329), and chapter 3 and chapter 7 of this [PhD thesis](http://arks.princeton.edu/ark:/88435/dsp0108612r49q).
 
-## Installation
-Download online system identification implementation from github
-`git clone https://github.com/haozhg/osysid.git`
+### Unknown dynamical system
+Suppose we have a (discrete) nonlinear and/or time-varying [dynamical system](https://en.wikipedia.org/wiki/State-space_representation), and the state space representation is
+- x(t+1) = f(t, x(t), u(t))
+- y(t) = g(t, x(t), u(t))
 
-## Implementation
-1.**OnlineSysId.m** implements **OnlineSysId** class in Matlab.   
-3.**onlinesysid.py** implements **OnlineSysId** class in Python.  
+where t is (discrete) time, x(t) is state vector, u(t) is control (input) vector, y(t) is observation (output) vector. f(~, ~, \~) and g(~, ~, \~) are unknown vector-valued nonlinear functions.
 
-## Documentation
-Matlab:  
-type **help OnlineSysId** for **OnlineSysId** class documentation.  
-Python:  
-type **help(onlinesysid.OnlineSysId)** for **OnlineSysId** class documentation.  
+- It is assumed that we have measurements x(t), u(t), y(t) for t = 0,1,...T. 
+- However, we do not know functions f and g. 
+- We aim to learn a model for the unknown dynamical system from measurement data up to time T.
+- We want to the model to be updated efficiently in real-time as new measurement data becomes available.
 
-## Demos
-1.**OnlineSysId_demo.m** demos the use of Matlab **OnlineSysId** class.  
-3.**onlinesysid_demo.py** demos the use of Python **OnlineSysId** class.  
+### Online linear model learning
+We would like to learn an adaptive [linear model](https://en.wikipedia.org/wiki/State-space_representation)
+- x(t+1) = A x(t) + B u(t)
+- y(t) = C x(t) + D u(t)
+
+that fits/explains the observation optimally. By Taylor expansion approximation, any nonlinear and/or time-varying system is linear locally. There are many powerful tools for linear control, e.g, [Linear Quadratic Regulator](https://en.wikipedia.org/wiki/Linear%E2%80%93quadratic_regulator), [Kalman filter](https://en.wikipedia.org/wiki/Kalman_filter). However, to accurately approximate the original (unknown) dynamical system, we need to update this linear model efficiently in real-time whenever new measurement becomes available.
+
+This problem can be formulated as an optimization problem, and at each time step t we need to solve a related but slightly different optimization problem. The optimal algorithm is achived through efficient reformulation of the problem. 
+
+- `osysid.OnlineLinearModel` class implements the optimal algorithm.
+
+### Online nonlinear model learning
+If we need to fit a nonlinear model to the observed data, this algorithm also applies in this case. However, notice that linear adaptive model is good approximation as long as it is updated in real-time. Also, the choice of nonlinear form can be tricky.
+
+In particular, we want to fit a nonlinear model of this form
+- x(t+1) = F * phi(x(t), u(t))
+- y(t) = G * psi(x(t), u(t))
+
+where phi(~, \~) and psi(~, \~) are known vector-valued nonlinear functions (e.g, quadratic) that we specify, F and G are unknown matrices of proper size. 
+
+- We aim to learn F and G from measurement data. 
+- Notice that this model form is general, and encompass many systems such as Lorenze attractor, Logistic map, Auto-regressive model, polynomial systems.
+- F and G can be updated efficiently in real-time when new data comes in.
+
+This can also be formulated as the same optimization problem, and the same efficient algorithm works in this case.
+
+- `osysid.OnlineModel` class implements the optimal algorithm.
+
+## Use
+### install
+pip
+```
+pip install osysid
+```
+
+Manual install
+```
+git clone https://github.com/haozhg/osysid.git
+cd osysid/
+pip install -e .
+```
+
+### Tests
+```
+cd osysid/
+python -m pytest .
+```
+
+### Demo
+See `./demo` for python notebook to demo the algorithm for data-driven real-time closed loop control.
+- `demo_lorenz.ipynb` shows control of [Lorenz attractor](https://en.wikipedia.org/wiki/Lorenz_system).
+- `demo_online_linear_model.ipynb` shows control of an unstable linear time-varying system.
 
 ## Authors:
-Hao Zhang  
-Clarence W. Rowley
+Hao Zhang 
 
-## Reference:
-Hao Zhang, Clarence W. Rowley,
-``Real-time control of nonlinear and time-varying systems based on 
-online linear system identification", in production, 2017.
+## Reference
+If you you used these algorithms or this python package in your work, please consider citing
 
-## Date created:
-June 2017
+```
+Zhang, Hao, Clarence W. Rowley, Eric A. Deem, and Louis N. Cattafesta. 
+"Online dynamic mode decomposition for time-varying systems." 
+SIAM Journal on Applied Dynamical Systems 18, no. 3 (2019): 1586-1609.
+```
 
+BibTeX
+```
+@article{zhang2019online,
+  title={Online dynamic mode decomposition for time-varying systems},
+  author={Zhang, Hao and Rowley, Clarence W and Deem, Eric A and Cattafesta, Louis N},
+  journal={SIAM Journal on Applied Dynamical Systems},
+  volume={18},
+  number={3},
+  pages={1586--1609},
+  year={2019},
+  publisher={SIAM}
+}
+```
+
+## Date created
+April 2017
+
+## License
+If you want to use this package, but find license permission an issue, pls contact me at `haozhang at alumni dot princeton dot edu`.

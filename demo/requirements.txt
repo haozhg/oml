@@ -1,0 +1,6 @@
+osysid
+numpy
+scipy
+matplotlib
+control
+slycot
