@@ -7,6 +7,17 @@ pip install osysid
 ```
 This algorithm is based on the online dynamic mode decomposition algorithm, which is also available as a python package `pip install odmd`, see [here](https://github.com/haozhg/odmd).
 
+## Showcase
+Lorenz system is one of the most classical nonlinear dynamical systems. Here we show how the proposed algorithm can be used to controll that.
+
+### No control
+![Lorenz state no control](https://github.com/haozhg/osysid/blob/master/assets/lorenz_state.png)
+
+### With control
+Data-driven real-time closed loop control
+![Lorenz state no control](https://github.com/haozhg/osysid/blob/master/assets/lorenz_state.png)
+
+
 ## Highlights
 - Efficiently online adaptive linear/nonlinear model learning. Any nonlinear and/or time-varying system is locally linear, as long as the model is updated in real-time wrt to measurement.
 - Optimal in terms of both time and space complexity. The time complexity (multiply–add operation for one iteration) is O(n^2), and space complexity is O(n^2), where n is the problem dimension.
