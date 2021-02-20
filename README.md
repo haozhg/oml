@@ -8,10 +8,10 @@ pip install osysid
 This algorithm is based on the online dynamic mode decomposition algorithm, which is also available as a python package `pip install odmd`, see [here](https://github.com/haozhg/odmd).
 
 ## Showcase: Lorenz system control
-Lorenz system is one of the most classical nonlinear dynamical systems. Here we show how the proposed algorithm can be used to controll that.
+[Lorenz system](https://en.wikipedia.org/wiki/Lorenz_system) is one of the most classical nonlinear dynamical systems. Here we show how the proposed algorithm can be used to controll that.
 
 ### No control
-Here is the state evolution when control if off, we can see the classical butterfly trajectory.
+If there is no control, we can see the mysterious butterfly trajectory.
 
 <p align="center">
   <img src="assets/lorenz_state.png" width="300" />
@@ -19,7 +19,7 @@ Here is the state evolution when control if off, we can see the classical butter
 </p>
 
 ### With control
-If we apply data-driven real-time closed loop control, it can be stabilized at a unstable fixed point.
+If we apply data-driven real-time closed loop control, it can be stabilized at an unstable fixed point (near the center of the butterfly wing).
 
 <p align="center">
   <img src="assets/lorenz_state_controlled.png" width="300" />
