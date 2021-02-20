@@ -17,18 +17,18 @@ and real-time control.
 For more details, see this [paper](https://epubs.siam.org/doi/pdf/10.1137/18M1192329).
 
 ### Unknown dynamical system
-Suppose we have a (discrete) nonlinear and time-varying system 
+Suppose we have a (discrete) nonlinear and time-varying system ([wikipedia](https://en.wikipedia.org/wiki/State-space_representation))
 - x(k+1) = f(t(k), x(k), u(k))
 - y(k) = g(t(k), x(k), u(k))
 
 and we have measurements x(k), u(k), y(k) for k = 0,1,...T
 
 ### Online linear model learning
-We would like to learn an adaptive linear model
+We would like to learn an adaptive linear model ([wikipedia](https://en.wikipedia.org/wiki/State-space_representation))
 - x(k+1) = A*x(k) + B*u(k)
 - y(k) = C*x(k) + D*u(k)
 
-that fits the observation optimally. Based on Taylor expansion, any nonlinear/time-varying system is linear locally. Also, there are many tools for linear control, e.g, LQR, Kalman filter. However, we need to update this linear model efficiently in real-time whenever new measurement becomes available.
+that fits the observation optimally. Based on Taylor expansion, any nonlinear/time-varying system is linear locally. Also, there are many tools for linear control, e.g, [LQR](https://en.wikipedia.org/wiki/Linear%E2%80%93quadratic_regulator), [Kalman filter](https://en.wikipedia.org/wiki/Kalman_filter). However, we need to update this linear model efficiently in real-time whenever new measurement becomes available.
 
 The problem can be formulated as an optimization problem, and at each time step k we need to solve a related but slightly different optimization problem. The optimal algorithm is achived through efficient reformulation of the problem. This package implements this algorithm, and for more detail pls refer to this [paper](https://epubs.siam.org/doi/pdf/10.1137/18M1192329).
 
@@ -40,9 +40,9 @@ Suppose we want to fit a nonlinear model of this form
 - x(k+1) = F * phi(x(k), u(k))
 - y(k) = G * psi(x(k), u(k))
 
-where phi(~, ~) and psi(~, ~) are known nonlinear nonlinear functions (e.g, linear or quadratic), F and G are unknown matrices of proper size. We aim to learn F and G from data.
+where phi(~, ~) and psi(~, ~) are known nonlinear nonlinear functions (e.g, quadratic), F and G are unknown matrices of proper size. We aim to learn F and G from measurement data. Notice that this model form is general, and encompass many systems such as Lorenze attractor, Logistic map, Auto-regressive model, polynomial systems.
 
-The problem can also be formulated as the same optimization problem, and the same efficient algorithm works in this case.
+This can also be formulated as the same optimization problem, and the same efficient algorithm works in this case.
 
 ## Use
 ### install
@@ -66,6 +66,8 @@ python -m pytest .
 
 ### Demo
 See `./demo` for python notebook to demo the algorithm for data-driven real-time closed loop control.
+- `demo_lorenz.ipynb` shows control of [Lorenz attractor](https://en.wikipedia.org/wiki/Lorenz_system).
+- `demo_online_linear_model.ipynb` shows control of an unstable time-varying linear system.
 
 ## Authors:
 Hao Zhang 
