@@ -11,7 +11,10 @@ This algorithm is based on the online dynamic mode decomposition algorithm, whic
 Lorenz system is one of the most classical nonlinear dynamical systems. Here we show how the proposed algorithm can be used to controll that.
 
 ### No control
-![Lorenz state no control](https://github.com/haozhg/osysid/blob/master/assets/lorenz_state.png)
+<p float="left">
+  <img src="https://github.com/haozhg/osysid/blob/master/assets/lorenz_state.png" width="100" />
+  <img src="https://github.com/haozhg/osysid/blob/master/assets/lorenz_control.png" width="100" /> 
+</p>
 
 ### With control
 Data-driven real-time closed loop control
