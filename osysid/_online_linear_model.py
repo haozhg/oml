@@ -39,7 +39,7 @@ class OnlineLinearModel:
     related but slightly different optimization problem. The optimal algorithm is achived through efficient 
     reformulation of the problem. 
     """
-    def __init__(self, n: int, k: int, m: int = None, alpha: float = 1.0) -> None:
+    def __init__(self, n: int, k: int, m: int = None, alpha: float = 0.9) -> None:
         """Online Linear Model
         Efficiently learn adaptive linear model from data in real-time
         
@@ -47,7 +47,7 @@ class OnlineLinearModel:
             n (int): state dimension
             k (int): control (input) dimension
             m (int): observation (output) dimension
-            alpha (float, optional): exponentiall weighting factor in system identification. Defaults to 1.0.
+            alpha (float, optional): exponentiall weighting factor in system identification. Defaults to 0.9.
         """
         # input check
         assert isinstance(n, int) and n >= 1

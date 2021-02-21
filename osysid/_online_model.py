@@ -58,14 +58,14 @@ class OnlineModel:
         "Online dynamic mode decomposition for time-varying systems."
         SIAM Journal on Applied Dynamical Systems 18, no. 3 (2019): 1586-1609.
     """
-    def __init__(self, n: int, m: int, alpha: float = 1.0) -> None:
+    def __init__(self, n: int, m: int, alpha: float = 0.9) -> None:
         """Creat an object for online model learning
         Usage: online_model = OnlineModel(n, m, alpha)
         
         Args:
             n (int): x dimension in model y(t) = M * x(t)
             m (int): y dimension in model y(t) = M * x(t)
-            alpha (float, optional): exponential weighting factor in (0, 1], smaller values allows more adaptive learning. Defaults to 1.0.
+            alpha (float, optional): exponential weighting factor in (0, 1], smaller values allows more adaptive learning. Defaults to 0.9.
         """
         # input check
         assert isinstance(n, int) and n >= 1
