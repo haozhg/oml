@@ -131,4 +131,6 @@ BibTeX
 April 2017
 
 ## License
+MIT
+
 If you want to use this package, but find license permission an issue, pls contact me at `haozhang at alumni dot princeton dot edu`.
