@@ -1,11 +1,11 @@
 # osysid
-Efficient adaptive online linear/nonlinear model learning (system identification) and control
+A python package for efficient adaptive online linear/nonlinear model learning (system identification) and control
 
 To get started,
 ```
 pip install osysid
 ```
-This algorithm is based on the online dynamic mode decomposition algorithm, which is also available as a python package `pip install odmd`, see [here](https://github.com/haozhg/odmd).
+This python package is based on the online dynamic mode decomposition algorithm, which is also available as a python package `pip install odmd`, see [here](https://github.com/haozhg/odmd).
 
 ## Showcase: Lorenz system control
 [Lorenz system](https://en.wikipedia.org/wiki/Lorenz_system) is one of the most classical nonlinear dynamical systems. Here we show how the proposed algorithm can be used to controll that. For more details, see [demo](https://github.com/haozhg/osysid/tree/master/demo).
@@ -27,11 +27,16 @@ If we apply data-driven real-time closed loop control, it can be stabilized at a
 </p>
 
 ## Highlights
-- Efficiently online adaptive linear/nonlinear model learning. Any nonlinear and/or time-varying system is locally linear, as long as the model is updated in real-time wrt to measurement.
-- Optimal in terms of both time and space complexity. The time complexity (multiply–add operation for one iteration) is O(n^2), and space complexity is O(n^2), where n is the problem dimension.
-- This local model can be used for short-horizon prediction 
-and real-time closed loop control.
+Here are some hightlights about this algorithm, and for more detail refer to this [paper](https://epubs.siam.org/doi/pdf/10.1137/18M1192329)
+
+- Efficient adaptive online linear/nonlinear model learning (system identification). Any nonlinear and/or time-varying system is locally linear, as long as the model is updated in real-time wrt to new measurements.
+- It finds the exact optimal solution (in the sense of least square error), without any approximation (unlike stochastic gradient descent). 
+- It achieves theoretical optimal time and space complexity. 
+- The time complexity (flops for one iteration) is O(n^2), where n is state dimension. This is much faster than standard algorithm O(n^2 * t), where t is the current time step (number of measurements). In online applications, t >> n and essentially will go to infinity.
+- The space complexity is O(n^2), which is far more efficient than standard algorithm O(n * t) (t >> n).
 - A weighting factor (in (0, 1]) can be used to place more weight on recent data, thus making the model more adaptive.
+- This local model can be used for short-horizon prediction and data-driven real-time closed loop control.
+- It has been successfully applied to flow separation control problem, and achived real-time closed loop control. See this [paper](https://doi.org/10.1017/jfm.2020.546) for details.
 
 ## Online system identification algorithm description
 This is a brief introduction to the algorithm. For full technical details, see this [paper](https://epubs.siam.org/doi/pdf/10.1137/18M1192329), and chapter 3 and chapter 7 of this [PhD thesis](http://arks.princeton.edu/ark:/88435/dsp0108612r49q).
