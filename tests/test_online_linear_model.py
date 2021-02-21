@@ -8,15 +8,15 @@ np.random.seed(20210218)
 logger = logging.getLogger(__name__)
 
 
-def update(A, eps=1e-9):
+def update(A, eps=1e-6):
     return A + eps * np.random.randn(*A.shape)
 
 
 def test_online_linear_model():
     # n is state dimension
     for n in range(2, 10):
-        k = n // 2 # control dimension
-        m = n // 2 # observation dimension
+        k = n // 2 # control (input) dimension
+        m = n // 2 # observation (output) dimension
         T = 16 * n # total number of measurements
         print(f"{n=}, {k=}, {m=}, {T=}")
 
@@ -40,7 +40,7 @@ def test_online_linear_model():
 
             # update model est
             olm.update(x, u, xn, y)
-            if t >= 2 * max(n, n + k, m):
+            if olm.ready:
                 assert np.linalg.norm(olm.A - A) / (n * n) < 1e-3
                 assert np.linalg.norm(olm.B - B) / (n * k) < 1e-3
                 assert np.linalg.norm(olm.C - C) / (m * n) < 1e-3
