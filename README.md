@@ -1,9 +1,9 @@
 # osysid
-A python package for efficient adaptive online linear/nonlinear model learning (system identification) and control
+A python package for efficient data-driven online model learning (system identification) and control
 
 To get started,
 ```
-pip install osysid
+pip install osysid --upgrade
 ```
 This python package is based on the online dynamic mode decomposition algorithm, which is also available as a python package `pip install odmd`, see [here](https://github.com/haozhg/odmd).
 
@@ -29,7 +29,7 @@ If we apply data-driven real-time closed loop control, it can be stabilized at a
 ## Highlights
 Here are some hightlights about this algorithm, and for more detail refer to this [paper](https://epubs.siam.org/doi/pdf/10.1137/18M1192329)
 
-- Efficient adaptive online linear/nonlinear model learning (system identification). Any nonlinear and/or time-varying system is locally linear, as long as the model is updated in real-time wrt to new measurements.
+- Efficient data-driven online linear/nonlinear model learning (system identification). Any nonlinear and/or time-varying system is locally linear, as long as the model is updated in real-time wrt to new measurements.
 - It finds the exact optimal solution (in the sense of least square error), without any approximation (unlike stochastic gradient descent). 
 - It achieves theoretical optimal time and space complexity. 
 - The time complexity (flops for one iteration) is O(n^2), where n is state dimension. This is much faster than standard algorithm O(n^2 * t), where t is the current time step (number of measurements). In online applications, t >> n and essentially will go to infinity.
@@ -38,7 +38,7 @@ Here are some hightlights about this algorithm, and for more detail refer to thi
 - This local model can be used for short-horizon prediction and data-driven real-time closed loop control.
 - It has been successfully applied to flow separation control problem, and achived real-time closed loop control. See this [paper](https://doi.org/10.1017/jfm.2020.546) for details.
 
-## Online system identification algorithm description
+## Online model learning algorithm description
 This is a brief introduction to the algorithm. For full technical details, see this [paper](https://epubs.siam.org/doi/pdf/10.1137/18M1192329), and chapter 3 and chapter 7 of this [PhD thesis](http://arks.princeton.edu/ark:/88435/dsp0108612r49q).
 
 ### Unknown dynamical system
@@ -46,11 +46,11 @@ Suppose we have a (discrete) nonlinear and/or time-varying [dynamical system](ht
 - x(t+1) = f(t, x(t), u(t))
 - y(t) = g(t, x(t), u(t))
 
-where t is (discrete) time, x(t) is state vector, u(t) is control (input) vector, y(t) is observation (output) vector. f(~, ~, \~) and g(~, ~, \~) are unknown vector-valued nonlinear functions.
+where t is (discrete) time, x(t) is state vector, u(t) is control (input) vector, y(t) is observation (output) vector. f(~, ~, ~) and g(~, ~, ~) are unknown vector-valued nonlinear functions.
 
-- It is assumed that we have measurements x(t), u(t), y(t) for t = 0,1,...T. 
+- It is assumed that we have measurements x(i), u(i), y(i) for i = 0,1,...t. 
 - However, we do not know functions f and g. 
-- We aim to learn a model for the unknown dynamical system from measurement data up to time T.
+- We aim to learn a model for the unknown dynamical system from measurement data up to time t.
 - We want to the model to be updated efficiently in real-time as new measurement data becomes available.
 
 ### Online linear model learning
@@ -65,13 +65,13 @@ This problem can be formulated as an optimization problem, and at each time step
 - `osysid.OnlineLinearModel` class implements the optimal algorithm.
 
 ### Online nonlinear model learning
-If we need to fit a nonlinear model to the observed data, this algorithm also applies in this case. However, notice that linear adaptive model is good approximation as long as it is updated in real-time. Also, the choice of nonlinear form can be tricky.
+If we need to fit a nonlinear model to the observed data, this algorithm also applies in this case. Keep in mind that linear adaptive model is good approximation as long as it is updated in real-time. Also, the choice of nonlinear form can be tricky. Based on Taylor expansion, if we add higher order nonlinearity (e.g., quadratic, cubic), the approximation can be more accurate. However, given the learned nonlinear model, it is still not easy to apply control.
 
 In particular, we want to fit a nonlinear model of this form
 - x(t+1) = F * phi(x(t), u(t))
 - y(t) = G * psi(x(t), u(t))
 
-where phi(~, \~) and psi(~, \~) are known vector-valued nonlinear functions (e.g, quadratic) that we specify, F and G are unknown matrices of proper size. 
+where phi(~, ~) and psi(~, ~) are known vector-valued nonlinear functions (e.g, quadratic) that we specify, F and G are unknown matrices of proper size. 
 
 - We aim to learn F and G from measurement data. 
 - Notice that this model form is general, and encompass many systems such as Lorenze attractor, Logistic map, Auto-regressive model, polynomial systems.
@@ -82,10 +82,10 @@ This can also be formulated as the same optimization problem, and the same effic
 - `osysid.OnlineModel` class implements the optimal algorithm.
 
 ## Use
-### install
-pip
+### Install
+Use pip
 ```
-pip install osysid
+pip install osysid --upgrade
 ```
 
 Manual install
@@ -141,4 +141,6 @@ MIT
 If you want to use this package, but find license permission an issue, pls contact me at `haozhang at alumni dot princeton dot edu`.
 
 ## Issues
-If there is any comment/suggestion, or if you find any bug, feel free to create an issue [here](https://github.com/haozhg/osysid/issues), and contact me by email.
+If there is any comment/suggestion, or if you find any bug, feel free to 
+- create an issue [here](https://github.com/haozhg/osysid/issues), or
+- fork this repo, and make changes, and create a pull request (merge from your fork to this repo)

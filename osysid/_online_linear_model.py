@@ -18,9 +18,9 @@ class OnlineLinearModel:
     where t is (discrete) time, x(t) is state vector, u(t) is control (input) vector, y(t) is observation (output) vector. 
     f(~, ~, ~) and g(~, ~, ~) are unknown vector-valued nonlinear functions.
 
-    - It is assumed that we have measurements x(t), u(t), y(t) for t = 0,1,...T. 
+    - It is assumed that we have measurements x(i), u(i), y(i) for i = 0,1,...t.  
     - However, we do not know functions f and g. 
-    - We aim to learn a model for the unknown dynamical system from measurement data up to time T.
+    - We aim to learn a model for the unknown dynamical system from measurement data up to time t.
     - We want to the model to be updated efficiently in real-time as new measurement data becomes available.
 
     # Online linear model learning
@@ -38,7 +38,6 @@ class OnlineLinearModel:
     This problem can be formulated as an optimization problem, and at each time step t we need to solve a 
     related but slightly different optimization problem. The optimal algorithm is achived through efficient 
     reformulation of the problem. 
-
     """
     def __init__(self, n: int, k: int, m: int = None, alpha: float = 1.0) -> None:
         """Online Linear Model
@@ -54,6 +53,7 @@ class OnlineLinearModel:
         assert isinstance(n, int) and n >= 1
         assert isinstance(k, int) and k >= 1
         assert m is None or (isinstance(m, int) and m >= 1)
+        alpha = float(alpha)
         assert alpha > 0 and alpha <= 1
 
         # set parameters
@@ -63,18 +63,17 @@ class OnlineLinearModel:
         self._alpha = alpha
 
         # additional parameters
-        self._T = 0
-        self._max = max(self._n, self._n + self._k)
+        self._t = 0
+        self._tmin = 2 * max(self._n, self._n + self._k)
         if self._m:
-            self._max = max(self._max, self._m)
-        self._max = 2 * self._max
+            self._tmin = max(self._tmin, 2 * self._m)
         self._ready = False
 
         # initialize model
-        self._f = OnlineModel(n, n + k)  # encodes A and B
+        self._f = OnlineModel(n + k, n, alpha)  # encodes A and B, model for xn=f(x, u)
         if self._m:
             logger.info("Learn x(t+1) = A * x(t) + B * u(t), y(t) = C * x(t) + D * u(t)")
-            self._g = OnlineModel(m, n + k)  # encodes C and D
+            self._g = OnlineModel(n + k, m, alpha)  # encodes C and D, model for y=g(x, u)
         else:
             logger.info("No output eqution, only learn x(t+1) = A * x(t) + B * u(t)")
             
@@ -97,18 +96,18 @@ class OnlineLinearModel:
             assert y.shape[0] == self._m
 
         # update f
-        z = np.concatenate((x, u))
-        self._f.update(z, xn)
+        w = np.concatenate((x, u))
+        self._f.update(w, xn)
 
         # update g if needed
         if self._m:
-            self._g.update(z, y)
+            self._g.update(w, y)
 
         # timestep
-        self._T += 1
+        self._t += 1
 
         # mark model as ready
-        if self._T >= self._max:
+        if self._t >= self._tmin:
             self._ready = True
 
     # no setter
@@ -204,13 +203,13 @@ class OnlineLinearModel:
         return self._alpha
 
     @property
-    def T(self) -> int:
+    def t(self) -> int:
         """Total number measurements processed
         
         Returns:
             int: [description]
         """
-        return self._T
+        return self._t
 
     @property
     def ready(self) -> bool:
