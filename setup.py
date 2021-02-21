@@ -7,8 +7,8 @@ with open("README.md", "r") as f:
 # This call to setup() does all the work
 setup(
     name="osysid",
-    version="0.1.7",
-    description="Efficient adaptive online linear/nonlinear model learning (system identification) and control",
+    version="0.1.8",
+    description="Efficient data-driven online model learning (system identification) and control",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/haozhg/osysid",
