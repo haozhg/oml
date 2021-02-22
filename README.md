@@ -8,7 +8,7 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/haozhg/osysid/pulls)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-A python package for efficient data-driven online model learning (system identification) and control
+A python package for efficient data-driven online model learning (system identification) and control.
 
 To get started,
 ```
