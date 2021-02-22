@@ -18,7 +18,7 @@ def test_online_linear_model():
         k = n // 2 # control (input) dimension
         m = n // 2 # observation (output) dimension
         T = 16 * n # total number of measurements
-        print(f"{n=}, {k=}, {m=}, {T=}")
+        print(f"n={n}, k={k}, m={m}, T={T}")
 
         # true model, slowly varying in time
         A = np.random.randn(n, n)
