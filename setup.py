@@ -7,7 +7,7 @@ with open("README.md", "r") as f:
 # This call to setup() does all the work
 setup(
     name="osysid",
-    version="0.1.8",
+    version="0.1.9",
     description="Efficient data-driven online model learning (system identification) and control",
     long_description=long_description,
     long_description_content_type="text/markdown",

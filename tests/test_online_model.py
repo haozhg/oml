@@ -13,7 +13,7 @@ def test_online_model():
     for m in range(2, 10):
         n = 2 * m # x dimension
         T = 16 * m # total number of measurements
-        print(f"{m=}, {n=}, {T=}")
+        print(f"m={m}, n={n}, T={T}")
 
         # true model, slowly varying in time
         A = np.random.randn(m, n)

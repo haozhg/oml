@@ -1,5 +1,13 @@
 # osysid
-A python package for efficient data-driven online model learning (system identification) and control
+[![License](https://img.shields.io/github/license/haozhg/osysid)](https://github.com/haozhg/osysid/blob/master/LICENSE)
+[![python version](https://img.shields.io/badge/python-3.6%203.7%203.8%203.9-green)](https://docs.python.org/3.8/)
+[![pypi version](https://img.shields.io/badge/pypi-1.0.9-green)](https://pypi.org/project/osysid/)
+[![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1dWeKuiEsVUjlNaKSFW6b7J-UyyFwov8C?usp=sharing)
+[![Downloads](https://pepy.tech/badge/osysid)](https://pepy.tech/project/osysid)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/haozhg/osysid/pulls)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
+A python package for efficient data-driven online model learning (system identification) and control.
 
 To get started,
 ```
@@ -83,12 +91,12 @@ This can also be formulated as the same optimization problem, and the same effic
 
 ## Use
 ### Install
-Use pip
+From PyPi
 ```
 pip install osysid --upgrade
 ```
 
-Manual install
+From source
 ```
 git clone https://github.com/haozhg/osysid.git
 cd osysid/
@@ -142,5 +150,5 @@ If you want to use this package, but find license permission an issue, pls conta
 
 ## Issues
 If there is any comment/suggestion, or if you find any bug, feel free to 
-- create an issue [here](https://github.com/haozhg/osysid/issues), or
-- fork this repo, and make changes, and create a pull request (merge from your fork to this repo)
+- create an issue [here](https://github.com/haozhg/osysid/issues), and/or
+- fork this repo, make suggested changes, and create a pull request (merge from your fork to this repo). See [this](https://numpy.org/devdocs/dev/index.html#development-process-summary) as an example guidance for contribution and PRs.
