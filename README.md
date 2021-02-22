@@ -1,4 +1,6 @@
 # osysid
+[![Downloads](https://pepy.tech/badge/osysid)](https://pepy.tech/project/osysid)
+
 A python package for efficient data-driven online model learning (system identification) and control
 
 To get started,
@@ -142,5 +144,5 @@ If you want to use this package, but find license permission an issue, pls conta
 
 ## Issues
 If there is any comment/suggestion, or if you find any bug, feel free to 
-- create an issue [here](https://github.com/haozhg/osysid/issues), or
-- fork this repo, and make changes, and create a pull request (merge from your fork to this repo)
+- create an issue [here](https://github.com/haozhg/osysid/issues)
+- (optional) fork this repo, make suggested changes, and create a pull request (merge from your fork to this repo)
