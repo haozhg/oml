@@ -143,6 +143,6 @@ MIT
 If you want to use this package, but find license permission an issue, pls contact me at `haozhang at alumni dot princeton dot edu`.
 
 ## Issues
-If there is any comment/suggestion, or if you find any bug, feel free to 
+If there is any comment/suggestion, or if you find any bug, feel free to
 - create an issue [here](https://github.com/haozhg/osysid/issues)
 - (optional) fork this repo, make suggested changes, and create a pull request (merge from your fork to this repo)
