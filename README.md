@@ -1,7 +1,7 @@
 # osysid
 [![License](https://img.shields.io/github/license/haozhg/osysid)](https://github.com/haozhg/osysid/blob/master/LICENSE)
-[![python version](https://img.shields.io/badge/python-3.6%203.7%203.8%203.9-green)](https://docs.python.org/3.8/)
-[![pypi version](https://img.shields.io/badge/pypi-1.0.9-green)](https://pypi.org/project/osysid/)
+[![python version](https://img.shields.io/badge/python-3.6+-green)](https://docs.python.org/3.8/)
+[![pypi version](https://img.shields.io/badge/pypi-0.1.9-green)](https://pypi.org/project/osysid/)
 [![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1dWeKuiEsVUjlNaKSFW6b7J-UyyFwov8C?usp=sharing)
 [![Downloads](https://pepy.tech/badge/osysid)](https://pepy.tech/project/osysid)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/haozhg/osysid/pulls)
