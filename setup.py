@@ -8,7 +8,7 @@ with open("README.md", "r") as f:
 setup(
     name="ai4s.oml",
     version="0.2.1",
-    description="Efficient data-driven Online Model Learning (OML) / system identification and control",
+    description="AI4Science: Efficient data-driven Online Model Learning (OML) / system identification and control",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/haozhg/oml",

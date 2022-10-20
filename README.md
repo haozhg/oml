@@ -7,7 +7,7 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/haozhg/oml/pulls)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-A python package for efficient data-driven online model learning (system identification) and control.
+AI4Science: Efficient data-driven Online Model Learning (OML) / system identification and control. The algorithm is proposed in this [paper](https://arxiv.org/abs/1707.02876.).
 
 To get started,
 ```
