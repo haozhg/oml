@@ -1,7 +1,7 @@
 # oml
 [![License](https://img.shields.io/github/license/haozhg/oml)](https://github.com/haozhg/oml/blob/master/LICENSE)
-[![python version](https://img.shields.io/badge/python-3.6+-green)](https://docs.python.org/3.8/)
-[![pypi version](https://img.shields.io/badge/pypi-0.1.9-green)](https://pypi.org/project/ai4s.oml/)
+[![python version](https://img.shields.io/badge/python-3.7+-green)](https://docs.python.org/3.8/)
+[![pypi version](https://img.shields.io/badge/pypi-0.2.1-green)](https://pypi.org/project/ai4s.oml/)
 [![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1dWeKuiEsVUjlNaKSFW6b7J-UyyFwov8C?usp=sharing)
 [![Downloads](https://pepy.tech/badge/oml)](https://pepy.tech/project/ai4s.oml)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/haozhg/oml/pulls)
