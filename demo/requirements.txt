@@ -1,4 +1,4 @@
-osysid
+ai4s.oml
 numpy
 scipy
 matplotlib
