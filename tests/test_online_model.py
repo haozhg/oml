@@ -1,5 +1,5 @@
 import numpy as np
-from osysid import OnlineModel
+from oml import OnlineModel
 
 np.random.seed(20210218)
 

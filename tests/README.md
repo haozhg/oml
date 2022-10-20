@@ -1,6 +1,6 @@
 # Tests
 ```
-pip install osysid
+pip install oml
 pip install -r requirements.txt
 python -m pytest .
 ```

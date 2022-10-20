@@ -1,7 +1,7 @@
 import logging
 
 import numpy as np
-from osysid import OnlineLinearModel
+from oml import OnlineLinearModel
 
 np.random.seed(20210218)
 

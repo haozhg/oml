@@ -1,22 +1,22 @@
-# osysid
-[![License](https://img.shields.io/github/license/haozhg/osysid)](https://github.com/haozhg/osysid/blob/master/LICENSE)
+# oml
+[![License](https://img.shields.io/github/license/haozhg/oml)](https://github.com/haozhg/oml/blob/master/LICENSE)
 [![python version](https://img.shields.io/badge/python-3.6+-green)](https://docs.python.org/3.8/)
-[![pypi version](https://img.shields.io/badge/pypi-0.1.9-green)](https://pypi.org/project/osysid/)
+[![pypi version](https://img.shields.io/badge/pypi-0.1.9-green)](https://pypi.org/project/oml/)
 [![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1dWeKuiEsVUjlNaKSFW6b7J-UyyFwov8C?usp=sharing)
-[![Downloads](https://pepy.tech/badge/osysid)](https://pepy.tech/project/osysid)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/haozhg/osysid/pulls)
+[![Downloads](https://pepy.tech/badge/oml)](https://pepy.tech/project/oml)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/haozhg/oml/pulls)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 A python package for efficient data-driven online model learning (system identification) and control.
 
 To get started,
 ```
-pip install osysid --upgrade
+pip install ai4s.oml --upgrade
 ```
-This python package is based on the online dynamic mode decomposition algorithm, which is also available as a python package `pip install odmd`, see [here](https://github.com/haozhg/odmd).
+This python package is based on the online dynamic mode decomposition algorithm, which is also available as a python package `pip install odmd --upgrade`, see [here](https://github.com/haozhg/odmd).
 
 ## Showcase: Lorenz system control
-[Lorenz system](https://en.wikipedia.org/wiki/Lorenz_system) is one of the most classical nonlinear dynamical systems. Here we show how the proposed algorithm can be used to controll that. For more details, see [demo](https://github.com/haozhg/osysid/tree/master/demo).
+[Lorenz system](https://en.wikipedia.org/wiki/Lorenz_system) is one of the most classical nonlinear dynamical systems. Here we show how the proposed algorithm can be used to controll that. For more details, see [demo](https://github.com/haozhg/oml/tree/master/demo).
 
 ### No control
 If there is no control, we can see the mysterious butterfly trajectory. It starts close to the bottom plane and enters into the butterfly wing region, then oscillates there.
@@ -70,7 +70,7 @@ that fits/explains the observation optimally. By Taylor expansion approximation,
 
 This problem can be formulated as an optimization problem, and at each time step t we need to solve a related but slightly different optimization problem. The optimal algorithm is achived through efficient reformulation of the problem. 
 
-- `osysid.OnlineLinearModel` class implements the optimal algorithm.
+- `oml.OnlineLinearModel` class implements the optimal algorithm.
 
 ### Online nonlinear model learning
 If we need to fit a nonlinear model to the observed data, this algorithm also applies in this case. Keep in mind that linear adaptive model is good approximation as long as it is updated in real-time. Also, the choice of nonlinear form can be tricky. Based on Taylor expansion, if we add higher order nonlinearity (e.g., quadratic, cubic), the approximation can be more accurate. However, given the learned nonlinear model, it is still not easy to apply control.
@@ -87,25 +87,25 @@ where phi(~, ~) and psi(~, ~) are known vector-valued nonlinear functions (e.g, 
 
 This can also be formulated as the same optimization problem, and the same efficient algorithm works in this case.
 
-- `osysid.OnlineModel` class implements the optimal algorithm.
+- `oml.OnlineModel` class implements the optimal algorithm.
 
 ## Use
 ### Install
 From PyPi
 ```
-pip install osysid --upgrade
+pip install ai4s.oml --upgrade
 ```
 
 From source
 ```
-git clone https://github.com/haozhg/osysid.git
-cd osysid/
+git clone https://github.com/haozhg/oml.git
+cd oml/
 pip install -e .
 ```
 
 ### Tests
 ```
-cd osysid/
+cd oml/
 python -m pytest .
 ```
 
@@ -150,5 +150,5 @@ If you want to use this package, but find license permission an issue, pls conta
 
 ## Issues
 If there is any comment/suggestion, or if you find any bug, feel free to 
-- create an issue [here](https://github.com/haozhg/osysid/issues), and/or
+- create an issue [here](https://github.com/haozhg/oml/issues), and/or
 - fork this repo, make suggested changes, and create a pull request (merge from your fork to this repo). See [this](https://numpy.org/devdocs/dev/index.html#development-process-summary) as an example guidance for contribution and PRs.
