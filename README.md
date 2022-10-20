@@ -3,7 +3,7 @@
 [![python version](https://img.shields.io/badge/python-3.7+-green)](https://docs.python.org/3.8/)
 [![pypi version](https://img.shields.io/badge/pypi-0.2.2-green)](https://pypi.org/project/ai4sci.oml/)
 [![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1dWeKuiEsVUjlNaKSFW6b7J-UyyFwov8C?usp=sharing)
-[![Downloads](https://pepy.tech/badge/oml)](https://pepy.tech/project/ai4sci.oml)
+[![Downloads](https://pepy.tech/badge/ai4sci.oml)](https://pepy.tech/project/ai4sci.oml)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/haozhg/oml/pulls)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
