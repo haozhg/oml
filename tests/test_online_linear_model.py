@@ -1,7 +1,7 @@
 import logging
 
 import numpy as np
-from oml import OnlineLinearModel
+from ai4sci.oml import OnlineLinearModel
 
 np.random.seed(20210218)
 

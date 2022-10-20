@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_namespace_packages
 
 # read readme as long description
 with open("README.md", "r") as f:
@@ -6,8 +6,8 @@ with open("README.md", "r") as f:
 
 # This call to setup() does all the work
 setup(
-    name="ai4s.oml",
-    version="0.2.1",
+    name="ai4sci.oml",
+    version="0.2.2",
     description="AI4Science: Efficient data-driven Online Model Learning (OML) / system identification and control",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -31,7 +31,7 @@ setup(
         "Programming Language :: Python :: 3.7",
     ],
     python_requires='>=3.7',
-    packages=["oml"],
+    packages=find_namespace_packages(include=["ai4sci.*"]),
     include_package_data=False,
     install_requires=["numpy"],
 )

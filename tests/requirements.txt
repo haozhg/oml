@@ -1,2 +1,2 @@
-oml
+ai4sci.oml
 pytest

@@ -1,6 +1,6 @@
 # Tests
 ```
-pip install oml
+pip install ai4sci.oml
 pip install -r requirements.txt
 python -m pytest .
 ```
