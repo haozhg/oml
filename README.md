@@ -1,9 +1,9 @@
 # oml
 [![License](https://img.shields.io/github/license/haozhg/oml)](https://github.com/haozhg/oml/blob/master/LICENSE)
 [![python version](https://img.shields.io/badge/python-3.7+-green)](https://docs.python.org/3.8/)
-[![pypi version](https://img.shields.io/badge/pypi-0.2.1-green)](https://pypi.org/project/ai4s.oml/)
+[![pypi version](https://img.shields.io/badge/pypi-0.2.2-green)](https://pypi.org/project/ai4sci.oml/)
 [![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1dWeKuiEsVUjlNaKSFW6b7J-UyyFwov8C?usp=sharing)
-[![Downloads](https://pepy.tech/badge/oml)](https://pepy.tech/project/ai4s.oml)
+[![Downloads](https://pepy.tech/badge/oml)](https://pepy.tech/project/ai4sci.oml)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/haozhg/oml/pulls)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
@@ -11,7 +11,7 @@ AI4Science: Efficient data-driven Online Model Learning (OML) / system identific
 
 To get started,
 ```
-pip install ai4s.oml --upgrade
+pip install ai4sci.oml --upgrade
 ```
 This python package is based on the online dynamic mode decomposition algorithm, which is also available as a python package `pip install odmd --upgrade`, see [here](https://github.com/haozhg/odmd).
 
@@ -70,7 +70,7 @@ that fits/explains the observation optimally. By Taylor expansion approximation,
 
 This problem can be formulated as an optimization problem, and at each time step t we need to solve a related but slightly different optimization problem. The optimal algorithm is achived through efficient reformulation of the problem. 
 
-- `oml.OnlineLinearModel` class implements the optimal algorithm.
+- `ai4sci.oml.OnlineLinearModel` class implements the optimal algorithm.
 
 ### Online nonlinear model learning
 If we need to fit a nonlinear model to the observed data, this algorithm also applies in this case. Keep in mind that linear adaptive model is good approximation as long as it is updated in real-time. Also, the choice of nonlinear form can be tricky. Based on Taylor expansion, if we add higher order nonlinearity (e.g., quadratic, cubic), the approximation can be more accurate. However, given the learned nonlinear model, it is still not easy to apply control.
@@ -87,13 +87,13 @@ where phi(~, ~) and psi(~, ~) are known vector-valued nonlinear functions (e.g, 
 
 This can also be formulated as the same optimization problem, and the same efficient algorithm works in this case.
 
-- `oml.OnlineModel` class implements the optimal algorithm.
+- `ai4sci.oml.OnlineModel` class implements the optimal algorithm.
 
 ## Use
 ### Install
 From PyPi
 ```
-pip install ai4s.oml --upgrade
+pip install ai4sci.oml --upgrade
 ```
 
 From source
@@ -105,7 +105,7 @@ pip install -e .
 
 ### Tests
 ```
-cd oml/
+cd tests/
 python -m pytest .
 ```
 

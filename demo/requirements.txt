@@ -1,4 +1,4 @@
-ai4s.oml
+ai4sci.oml
 numpy
 scipy
 matplotlib

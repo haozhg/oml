@@ -1,5 +1,5 @@
 import numpy as np
-from oml import OnlineModel
+from ai4sci.oml import OnlineModel
 
 np.random.seed(20210218)
 
